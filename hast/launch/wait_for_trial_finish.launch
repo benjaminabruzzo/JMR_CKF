@@ -1,0 +1,14 @@
+<launch>
+	<arg name="ugv1_running_topic"		default="/hast/ugv1_running" />
+	<arg name="ugv2_running_topic"		default="/hast/ugv2_running" />
+	<arg name="trial_running_topic"		default="/hast/trial_running" />
+
+	<node pkg="hast" type="wait_for_trial_finish" name="wait_for_trial_finish_$(env HOST)" output="screen" required="true" >
+		<param name="ugv1_running_topic"			value="$(arg ugv1_running_topic)" />
+		<param name="ugv2_running_topic"			value="$(arg ugv2_running_topic)" />
+		<param name="trial_running_topic"			value="$(arg trial_running_topic)" />
+	</node>
+
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_wait_for_trial_finish_$(env HOST)"	output="screen"	required="true"/>
+
+</launch>

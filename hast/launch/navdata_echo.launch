@@ -1,0 +1,8 @@
+<launch>
+	<arg name="launcher" 		default="navdata_echo_launch" />
+
+	<node pkg="rostopic" type="rostopic" 	name="navdataEcho" 	output="screen" args="echo /ardrone/navdata" />
+
+	<node pkg="hast"	type="shutdownListener"	output="screen" name="shutdownListener_$(arg launcher)"	 required="true"/>
+
+</launch>

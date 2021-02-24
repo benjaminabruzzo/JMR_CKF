@@ -1,0 +1,11 @@
+# directory including left* and right* images
+date: 20200117
+path: /home/benjamin/ros/data/calibrations/20200117/ugv1
+imgdir: /raw
+stereo_caldata: /ugv1_caldata.m
+stereo_rectdata: /ugv1_rectdata.m
+
+ugv_n: ugv1
+ugv_serial: mk3a
+left_serial: 17496991
+right_serial: 17496985

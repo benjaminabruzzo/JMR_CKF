@@ -1,0 +1,50 @@
+\begin{table}
+	% \tiny
+	% \setlength{\tabcolsep}{5pt} % Default value: 6pt
+	% \fontsize{9pt}{9.25pt}\selectfont
+	% \renewcommand\arraystretch{2}
+	\centering
+	\caption{Mean position errors of all vehicle estimates averaged across all trials of each strategy for each map. RMSE is calculated by comparing the entire trajectory of all vehicles to the ground truth. Mean RMSE is calculated by averaging all of the errors of the entire trajectories of all vehicles to the ground truth for all maps. The mean percentage is the average of the total errors of all vehicles at the end of each trajectory for all iterations of all maps. }
+	\label{tab:avg_errors}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{c c | c  c  c  c | c c}
+		\toprule
+		\toprule
+		 & Map \#  & 1 & 2 & 3 & 4 & \multicolumn{2}{c}{Mean}\\ 
+		\multicolumn{2}{c|}{Strategy} &\multicolumn{4}{c|}{RMSE [cm]} & [cm] & [\%] \\ 
+		\midrule
+			\multirow{2}{*}{$\prescript{}{1}{\bm{C}}_{}^{H}$}
+				& CKF  &   12.5 &    2.3 &    2.5 &    6.8 &    6.3 &   0.57 \\
+				& SLAM &    5.1 &    4.0 &    4.2 &    4.4 &    4.5 &   0.29 \\
+		\midrule
+			\multirow{2}{*}{$\prescript{}{1}{\bm{C}}_{}^{L}$}
+				& CKF  &    1.6 &    1.3 &    1.3 &    1.6 &    1.4 &   0.19 \\
+				& SLAM &    9.7 &    3.8 &    4.6 &    6.9 &    6.4 &   0.42 \\
+		\midrule
+			\multirow{2}{*}{$\prescript{}{2}{\bm{C}}_{G}^{H}$}
+				& CKF  &    2.3 &    1.6 &    2.0 &    2.7 &    2.2 &   0.30 \\
+				& SLAM &    7.5 &    6.9 &    6.6 &    8.8 &    7.5 &   0.58 \\
+		\midrule
+			\multirow{2}{*}{$\prescript{}{2}{\bm{C}}_{R}^{H}$}
+				& CKF  &    3.4 &    1.8 &    2.3 &    2.4 &    2.5 &   0.43 \\
+				& SLAM &    6.6 &    5.7 &    6.7 &    7.8 &    6.7 &   0.48 \\
+		\midrule
+			\multirow{2}{*}{$\prescript{}{2}{\bm{C}}_{G}^{L}$}
+				& CKF  &    2.8 &    1.5 &    2.3 &    3.0 &    2.4 &   0.39 \\
+				& SLAM &   11.1 &    6.9 &    9.4 &   11.4 &    9.8 &   0.89 \\
+		\midrule
+			\multirow{2}{*}{$\prescript{}{2}{\bm{C}}_{R}^{L}$}
+				& CKF  &    3.1 &    1.9 &    2.3 &    2.9 &    2.6 &   0.47 \\
+				& SLAM &    7.9 &    6.6 &    7.2 &   10.2 &    8.0 &   0.84 \\
+		\toprule
+		\toprule
+	\end{tabular}
+	\renewcommand{\arraystretch}{1}
+	%\renewcommand{\arraystretch}{2}
+	%vspace{-8pt}%use this in case the image is in the margin
+\end{table}
+	% mean(batch_data.end_errors.all_errors.dist) = 22.9709
+	% mean(batch_data.end_errors.all_errors.ckf)  = 0.0894
+	% mean(batch_data.end_errors.all_errors.slam) = 0.1350
+	% mean(batch_data.end_errors.all_errors.ckf_percent)  =   0.39
+	% mean(batch_data.end_errors.all_errors.slam_percent) =   0.58

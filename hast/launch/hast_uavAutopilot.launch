@@ -1,0 +1,58 @@
+<launch>
+	<!-- <arg name="date" 			default="20181207" /> -->
+	<!-- <arg name="user" 			default="$(env USER)" /> -->
+	<!-- <arg name="trial" 			default="000" /> -->
+	<!-- <arg name="launcher"		default="hast_uav_$(env HOST)" /> -->
+
+	<arg name="gazebo"						default="false" />
+	<arg name="useBackstepping" 	default="false" />
+
+	<arg name="uav_cmd_topic" 					default="/hast/uav/cmd_vel" />
+	<arg name="uav_state_sub" 					default="/hast/uav/state"/>
+	<arg name="PicketService_ser" 			default="/hast/service/uav/picketControl"/>
+	<arg name="ControlService_ser"			default="/hast/service/uav/ControlIsOn"/>
+	<arg name="ugv1EstimatedState_sub" 	default="/ugv1/ckf_state"/>
+	<arg name="ugv2EstimatedState_sub" 	default="/ugv2/ckf_state"/>
+
+
+	<arg unless="$(arg gazebo)" name="Kp" 		value="0.25"/>
+	<arg     if="$(arg gazebo)" name="Kp" 		value="0.5"/>
+
+	<node 	pkg="hast" 	type="uavAutopilot"	name="uavAutopilot_$(env HOST)" output="screen">
+		<param name="gazebo" 									value="$(arg gazebo)"/>
+
+		<param name="uav_cmd_topic"						value="$(arg uav_cmd_topic)"/>
+		<param name="uav_state_sub"						value="$(arg uav_state_sub)"/>
+		<param name="PicketService_ser" 			value="$(arg PicketService_ser)"/>
+		<param name="ControlService_ser" 			value="$(arg ControlService_ser)"/>
+		<param name="ugv1EstimatedState_sub"	value="$(arg ugv1EstimatedState_sub)"/>
+		<param name="ugv2EstimatedState_sub"	value="$(arg ugv2EstimatedState_sub)"/>
+
+		<param name="MinTilt" 		value="0.0001"/> 	<!-- min threshold for tilt on any one axis in degrees-->
+		<param name="MaxTilt" 		value="0.4"/> 		<!-- max threshold for tilt on any one axis in degrees-->
+		<param name="MaxYawRate" 	value="0.4"/> 		<!-- //upped for tilt testing to 0.75, 0.3 nominal-->
+
+		<!-- legacy PV controller -->
+		<param name="Kp" 	value="$(arg Kp)"/> 	<!-- position gain-->
+		<param name="Kv" 	value="0.25"/> 	<!-- velocity gain-->
+		<param name="Ky" 	value="0.025"/> <!-- yaw gain-->
+
+		<!-- backstepping PID controller -->
+		<param name="useBackstepping"	value="$(arg useBackstepping)"/>
+		<param name="u_cmd_scale" 		value="1"/>
+		<param name="posXY_gain_p"		value="0.5"/>
+		<param name="posXY_gain_i"		value="0.001"/>
+		<param name="posXY_gain_d"		value="0.00025"/>
+		<param name="posXY_limit"			value="1.00"/>
+		<param name="velXY_gain_p"		value="0.50"/>
+		<param name="velXY_gain_i"		value="0.00"/>
+		<param name="velXY_gain_d"		value="0.00"/>
+		<param name="velXY_limit"			value="0.75"/>
+		<param name="RP_gain_p"				value="5.0"/>
+		<param name="RP_gain_d"				value="1.0"/>
+		<param name="RP_limit"				value="5.0"/>
+
+	</node>
+
+
+</launch>

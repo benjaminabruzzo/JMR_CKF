@@ -1,0 +1,114 @@
+<launch>
+	<arg name="launcher"							default="jointSLAM" />
+	<arg name="trial"									default="001" />
+	<arg name="date"									default="20190814" />
+	<arg name="user"									default="$(env USER)" />
+	<arg name="numberOfUGV"						default="1" />
+	<arg name="use_ugvugv_sensor" 		default="true" />
+
+	<arg name="uav_navdata_topic"			default="/ardrone/navdata" />
+	<arg name="uav_slam_pose_topic"		default="/hast/jointslam/uav/slam_pose" />
+	<arg name="ugv1_mux_topic"				default="/hast/jointslam/ugv1/mux_pose" />
+	<arg name="ugv2_mux_topic"				default="/hast/jointslam/ugv2/mux_pose" />
+	<arg name="ugv1_pose_topic"				default="/hast/jointslam/ugv1/est_pose" />
+	<arg name="ugv2_pose_topic"				default="/hast/jointslam/ugv2/est_pose" />
+	<arg name="uav_pose_topic"				default="/hast/jointslam/uav/est_pose" />
+
+	<!-- <arg name="ugv1_clearcostmap_topic" 	default="/move_base_ugv1/clear_costmaps" />
+	<arg name="ugv2_clearcostmap_topic" 	default="/move_base_ugv2/clear_costmaps" /> -->
+
+	<arg name="jointslam_state_flag"						default="/hast/jointslam/slamstate" />
+	<arg name="uav_flight_state_topic"					default="/hast/uav/flightstate" />
+	<arg name="slam_uav_autopilot_state_topic"	default="/hast/jointslam/uav/state" />
+	<arg name="slam_vehicle_poses_topic"				default="/hast/jointslam/vehicle_states" />
+	<arg name="jointslam_switch_topic"					default="/hast/service/jointslam/slam_switch" />
+	<arg name="uavslam_switch_topic"						default="/hast/service/uavslam/slam_switch" />
+	<arg name="absolute_measurements" 					default="false"/>
+	<arg name="max_number_of_tags"							default="20" />
+	<arg name="aprilObstacleCloud_topic"				default="/hast/slam/aprilObstacles" />
+	<arg name="tag_detection_topic"							default="/ardrone/tag_detections" />
+	<arg name="goal_tag_service_topic"					default="/hast/service/ugv/goal" />
+
+	<!-- <arg name="ref_TF_frame"	default="/map"/> -->
+	<arg name="april_cloud_frame"	default="/ugv1/map"/>
+	<arg name="ref_TF_frame"	default="/ugv1/hast/odom"/>
+	<arg name="uav_TF_frame"	default="hast/jointslam/uav/base_frame"/>
+	<arg name="ugv1_TF_frame"	default="hast/jointslam/ugv1/base_frame"/>
+	<arg name="ugv2_TF_frame"	default="hast/jointslam/ugv2/base_frame"/>
+
+	<arg name="shutdown_topic"	default="/hast/shutdown" />
+	<arg name="matlab_field" 		default="jointSLAM" />
+
+	<!-- <node		pkg="hast"		type="jointSLAM"	name="jointSLAM"	output="screen"> -->
+	<node		pkg="hast"		type="splitSLAM"	name="jointSLAM"	output="screen">
+		<param name="matlab_field" 	value="$(arg matlab_field)"/>
+		<param name="s_full_field" 	value="fullSLAM"/>
+
+		<param name="slam_vehicle_poses_topic"	value="$(arg slam_vehicle_poses_topic)"/>
+		<param name="jointslam_state_flag"			value="$(arg jointslam_state_flag)"/>
+		<param name="jointslam_switch_topic"		value="$(arg jointslam_switch_topic)"/>
+		<param name="uavslam_switch_topic"			value="$(arg uavslam_switch_topic)"/>
+
+		<param name="numberOfUAV"								value="1"/>
+		<param name="uav_slam_pose_topic"				value="$(arg uav_slam_pose_topic)"/>
+		<param name="uav_navdata_topic"					value="$(arg uav_navdata_topic)"/>
+		<param name="uav_flight_state_topic"		value="$(arg uav_flight_state_topic)"/>
+		<param name="slam_uav_autopilot_state_topic"	value="$(arg slam_uav_autopilot_state_topic)" />
+
+		<!-- <param name="ugv1_clearcostmap_topic" 	value="$(arg ugv1_clearcostmap_topic)"/>
+		<param name="ugv2_clearcostmap_topic" 	value="$(arg ugv2_clearcostmap_topic)"/> -->
+
+		<param name="numberOfUGV"					value="$(arg numberOfUGV)"/>
+		<param name="ugv1_mux_topic"			value="$(arg ugv1_mux_topic)"/>
+		<param name="ugv2_mux_topic"			value="$(arg ugv2_mux_topic)"/>
+		<param name="ugv1_pose_topic"			value="$(arg ugv1_pose_topic)"/>
+		<param name="ugv2_pose_topic"			value="$(arg ugv2_pose_topic)"/>
+		<param name="uav_pose_topic"			value="$(arg uav_pose_topic)"/>
+		<param name="use_ugvugv_sensor"		value="$(arg use_ugvugv_sensor)"/>
+
+
+		<param name="max_number_of_tags"				value="$(arg max_number_of_tags)"/>
+		<param name="tag_detection_topic"				value="$(arg tag_detection_topic)"/>
+		<param name="aprilObstacleCloud_topic"	value="$(arg aprilObstacleCloud_topic)"/>
+		<param name="goal_tag_service_topic"		value="$(arg goal_tag_service_topic)"/>
+
+		<param name="april_cloud_frame"	value="$(arg april_cloud_frame)"/>
+		<param name="ref_TF_frame"	value="$(arg ref_TF_frame)"/>
+		<param name="uav_TF_frame"	value="$(arg uav_TF_frame)"/>
+		<param name="ugv1_TF_frame"	value="$(arg ugv1_TF_frame)"/>
+		<param name="ugv2_TF_frame"	value="$(arg ugv2_TF_frame)"/>
+
+		<param name="uavCovInit"		value="0.001"/> <!-- initial value for cov diagonal -->
+		<param name="ugvCovInit"		value="0.001"/> <!-- initial value for cov diagonal -->
+		<param name="aprilCovInit"	value="0.05"/> <!-- initial value for cov diagonal -->
+		<param name="growCovU"			value="0.0"/> <!-- initial value for cov diagonal -->
+		<param name="uavQdkScale" 	value="0.0"/>  <!-- scale factor for Qdk immediately after any update -->
+		<param name="uavQwScale"		value="0.1"/>
+		<param name="ugvQwScale"		value="0.001"/>
+		<param name="RkScale"				value="0.1"/>
+		<param name="RkXYZ"					value="1.0"/>
+		<param name="RkYaw"					value="1.0"/>
+
+		<param name="shutdown_topic"				value="$(arg shutdown_topic)"/>
+		<param name="absolute_measurements"	value="$(arg absolute_measurements)"/>
+
+	</node>
+
+</launch>
+
+
+
+	<!-- <node 	pkg="hast" 	type="threshImage"	name="threshImage" 		/> -->
+
+	<!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hast)/config/$(arg tb_base)/$(arg tb_base)_rviz.rviz" /> -->
+
+
+	<!-- <node pkg="rosbag" type="record" name="rosbag" args="-O $(arg bagpath) tf /ardrone/cmd_vel /ardrone/imu /ardrone/land /ardrone/mag /ardrone/navdata /ardrone/navdata_pwm /ardrone/reset /ardrone/odom /ardrone/takeoff /clock /vo2/info /vo2/odometry /vo2/pose /mobile_base /tag_detections -e '/hast/(.*)' -e '/move_base/(.*)' "/> -->
+
+	<!-- Stereoscopic Image Processing -->
+	<!-- <arg name="sync_namespace" default="sync" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" output="screen" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="image_view" type="image_view" name="left_image_view" args="image:=/$(arg sync_namespace)/left/image_rect_color" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="image_view" type="image_view" name="right_image_view" args="image:=/$(arg sync_namespace)/right/image_rect_color" /> -->
+	<!-- <node pkg="image_view" type="disparity_view" name="disparity_view" args="image:=/$(arg sync_namespace)/disparity" /> -->
+	<!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find ar_pose)/launch/live_multi.rviz"/> -->

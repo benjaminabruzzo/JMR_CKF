@@ -1,0 +1,61 @@
+<launch>
+	<arg name="tf_prefix"		default="/vicon" />
+
+	<arg name="id02_model" 	default="$(find robot_descriptions)/vicon/april02.urdf.xacro"/>
+	<arg name="id03_model" 	default="$(find robot_descriptions)/vicon/april03.urdf.xacro"/>
+	<arg name="id05_model" 	default="$(find robot_descriptions)/vicon/april05.urdf.xacro"/>
+	<arg name="id06_model" 	default="$(find robot_descriptions)/vicon/april06.urdf.xacro"/>
+	<arg name="id07_model" 	default="$(find robot_descriptions)/vicon/april07.urdf.xacro"/>
+	<arg name="id08_model" 	default="$(find robot_descriptions)/vicon/april08.urdf.xacro"/>
+	<arg name="id10_model" 	default="$(find robot_descriptions)/vicon/april10.urdf.xacro"/>
+	<arg name="id11_model" 	default="$(find robot_descriptions)/vicon/april11.urdf.xacro"/>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="april02" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg id02_model)"/>
+	</include>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="april03" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg id03_model)"/>
+	</include>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="april05" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg id05_model)"/>
+	</include>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="april06" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg id06_model)"/>
+	</include>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="april07" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg id07_model)"/>
+	</include>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="april08" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg id08_model)"/>
+	</include>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="april10" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg id10_model)"/>
+	</include>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="april11" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg id11_model)"/>
+	</include>
+
+</launch>

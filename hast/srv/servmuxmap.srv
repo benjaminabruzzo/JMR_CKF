@@ -1,0 +1,4 @@
+# string requesting_node
+---
+geometry_msgs/Pose map_pose # header of response time
+float64 map_yaw # yaw angle from global to local map

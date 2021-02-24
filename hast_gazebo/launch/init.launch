@@ -1,0 +1,42 @@
+<launch>
+	<arg name="gui"	 					default="false"/>
+	<arg name="paused"				default="false"/>
+	<arg name="verbose"	 			default="false"/>
+	<arg name="use_sim_time"	default="true"/>
+
+	<arg name="trial" 			default="001" />					<param name="/hast/trial"			value="$(arg trial)"		type = "str" />
+	<arg name="date" 				default="20200810" />			<param name="/hast/date"			value="$(arg date)" 		type = "str" />
+	<arg name="user" 				default="$(env USER)" />	<param name="/hast/user"			value="$(arg user)" 		type = "str" />
+	<arg name="exp_code"		default="A" />						<param name="/hast/exp_code"	value="$(arg exp_code)"	type = "str" />
+
+
+	<include file="$(find hast_gazebo)/launch/empty_world.launch">
+		<arg name="world_name" 		value="$(find robot_descriptions)/worlds/empty.world"/>
+		<!-- <arg name="world_name" 		value="$(find robot_descriptions)/worlds/fast.world"/> -->
+		<arg name="gui" 					value="$(arg gui)"/>
+		<arg name="paused" 				value="$(arg paused)"/>
+		<arg name="verbose" 			value="$(arg verbose)"/>
+		<arg name="use_sim_time" 	value="$(arg use_sim_time)"/>
+	</include>
+
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_gazebo"	output="screen"	required="true"/>
+
+</launch>
+
+
+
+<!--
+rostopic pub -1 /ardrone/takeoff std_msgs/Empty
+
+rostopic pub -1 /ardrone/land std_msgs/Empty
+
+rostopic pub -1 /ardrone/flattrim std_msgs/Empty
+rostopic pub -1 /ardrone/imu_recalib std_msgs/Empty
+rostopic pub -1 /ardrone/reset std_msgs/Empty
+
+ -->
+ <!-- <group if="$(arg block)"> -->
+	 <!-- stuff that will only be evaluated if foo is true -->
+		 <!-- <include file="$(find robot_descriptions)/common/launch/spawn_dae_block.launch" /> -->
+		 <!-- <include file="$(find robot_descriptions)/common/launch/block_$(arg vicon_date)_$(arg vicon_run).launch" /> -->
+ <!-- </group> -->

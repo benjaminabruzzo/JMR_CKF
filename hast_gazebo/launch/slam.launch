@@ -1,0 +1,37 @@
+<launch>
+	<arg name="uav_flight_state_topic"					default="/hast/uav/flightstate" />
+	<arg name="cmd_uav_autopilot_state_topic"		default="/hast/uav/state" />
+	<arg name="ckf_uav_autopilot_state_topic"		default="/ckf/uav/state" />
+	<arg name="slam_uav_autopilot_state_topic"	default="/hast/jointslam/uav/state" />
+	<arg name="jointslam_switch_topic"					default="/hast/service/jointslam/slam_switch" />
+
+	<!-- start apriltag node and swap drone to bottom camera -->
+		<!-- <include file="$(find hast)/launch/hast_april_bottomcam.launch"/> -->
+
+	<!-- start jointslam -->
+		<arg name="absolute_measurements" 		default="false"/>
+		<arg name="jointslam_state_flag"  		default="/hast/jointslam/slamstate" />
+
+		<include file="$(find hast)/launch/hast_jointSLAM.launch">
+			<arg name="numberOfUGV" 										value="2" />
+			<arg name="jointslam_state_flag" 						value="$(arg jointslam_state_flag)"/>
+			<arg name="absolute_measurements" 					value="$(arg absolute_measurements)" />
+			<arg name="uav_flight_state_topic"					value="$(arg uav_flight_state_topic)" />
+			<arg name="slam_uav_autopilot_state_topic"	value="$(arg slam_uav_autopilot_state_topic)" />
+		</include>
+
+		<!-- uav pose/state switch for autopilot -->
+		<node pkg="hast" type="uav_topic_switch.py" name="uav_topic_switch_$(env HOST)" output="screen" >
+			<param name="jointslam_state_flag"						value="$(arg jointslam_state_flag)" />
+			<param name="cmd_uav_autopilot_state_topic"		value="$(arg cmd_uav_autopilot_state_topic)" />
+			<param name="ckf_uav_autopilot_state_topic"		value="$(arg ckf_uav_autopilot_state_topic)" />
+			<param name="slam_uav_autopilot_state_topic"	value="$(arg slam_uav_autopilot_state_topic)" />
+		</node>
+
+	<!-- start experiment -->
+
+	<arg name="launcher"	default="slam_launch_$(env HOST)" />
+	<!-- <node pkg="hast"	type="killhast"					name="kill_$(arg launcher)"							output="screen" required="true"/> -->
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+
+</launch>

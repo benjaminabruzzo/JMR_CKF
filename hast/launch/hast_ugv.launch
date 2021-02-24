@@ -1,0 +1,91 @@
+<launch>
+	<arg name="ugv_n"									default="ugv1" />
+	<arg name="gazebo"								default="false" />
+	<arg name="launcher"							default="hast_$(arg ugv_n)" />
+	<arg name="PixelScale"						default="10.0" />
+	<arg name="primary" 							default="false" />
+	<arg name="saveraw" 							default="false" />
+	<arg name="showcircles" 					default="false"/>
+	<arg name="save_images" 					default="false" />
+	<arg name="showYUV" 							default="false"/>
+	<arg name="showBool" 							default="false" />
+	<arg name="trigger_saveraw"				default="false" />  <!-- rosrun hast triggerSaveRaw -->
+	<arg name="absolute_init"					default="false"/>
+	<arg name="absolute_measurements"	default="false"/>
+
+	<arg name="driver_cmd_topic"			default="$(arg ugv_n)/driver/cmd_vel" />
+	<arg name="move_base_cmd_topic" 	default="$(arg ugv_n)/move_base/cmd_vel" />
+	<!-- might delete both of these -->
+		<!-- <arg name="mux_cmd_topic" 				default="$(arg ugv_n)/mux/cmd_vel" /> -->
+		<!-- <arg name="trial_cmd_vel" 				default="$(arg ugv_n)/trial/cmd_vel" /> -->
+	<!-- might delete both of these -->
+
+	<arg unless="$(arg gazebo)" name="color_param_file" 		value="$(find hast)/config/stereo_b92_params.yaml"/>
+	<arg     if="$(arg gazebo)" name="color_param_file" 		value="$(find hast)/config/stereo_gazebo_params.yaml"/>
+	<arg unless="$(arg gazebo)" name="stereo_param_file"		value="$(find hast)/cam_info/ugvn/$(arg ugv_n)_pgr_params.yaml"/>
+	<arg     if="$(arg gazebo)" name="stereo_param_file"		value="$(find robot_descriptions)/UGV_n/config/gazebo_pgr_params.yaml"/>
+	<arg unless="$(arg gazebo)" name="Hcam2ugv_param_file"	value="$(find hast)/cam_info/ugvn/$(arg ugv_n)_H_cam2ugv.yaml"/>
+	<arg     if="$(arg gazebo)" name="Hcam2ugv_param_file"	value="$(find hast)/cam_info/ugvn/gazebo_H_cam2ugv.yaml"/>
+
+	<arg name="jointslam_state_flag"  	default="/hast/jointslam/slamstate" />
+	<arg name="jointslam_switch_topic"	default="/hast/service/jointslam/slam_switch" />
+
+	<param name="/trial/$(arg ugv_n)/host" 	value="$(env HOST)"  type = "str" />
+
+	<!-- <node pkg="hast"			type="killhast"		 			output="screen" required="true" name="killhast_$(arg launcher)_$(env HOST)"/> -->
+	<!-- <node pkg="hast"			type="shutdownListener" output="screen" required="true" name="shutdownListener_$(arg launcher)_$(env HOST)"/> -->
+
+	<include file="$(find hast)/launch/hast_stereo_obs.launch">
+		<arg name="color_param_file"			value="$(arg color_param_file)"/>
+		<arg name="stereo_param_file"			value="$(arg stereo_param_file)"/>
+		<arg name="Hcam2ugv_param_file"		value="$(arg Hcam2ugv_param_file)"/>
+		<arg name="roi_halfwindow"				value="100" />
+		<arg name="ugv_n" 								value="$(arg ugv_n)"/>
+		<arg name="gazebo"								value="$(arg gazebo)"/>
+		<arg name="saveraw" 							value="$(arg saveraw)"/>
+		<arg name="showYUV" 							value="$(arg showYUV)"/>
+		<arg name="showBool" 							value="$(arg showBool)"/>
+		<arg name="showcircles" 					value="$(arg showcircles)"/>
+		<arg name="save_images" 					value="$(arg save_images)" />
+		<arg name="trigger_saveraw"				value="$(arg trigger_saveraw)"/>
+		<arg name="uav_TF_child"					value="$(arg ugv_n)/uav/stereo_raw" />
+		<arg name="uav_TF_parent"					value="$(arg ugv_n)/hast/base_footprint"	/>
+		<arg name="PixelScale"						value="$(arg PixelScale)" />
+	</include>
+
+	<include file="$(find hast)/launch/hast_ugvCKF.launch" required="true">
+		<arg name="ugv_n" 						value="$(arg ugv_n)"/>
+		<arg name="primary" 					value="$(arg primary)"/>
+		<arg name="gazebo"						value="$(arg gazebo)"/>
+		<arg name="absolute_init"			value="$(arg absolute_init)"/>
+	</include>
+
+	<include file="$(find hast)/launch/ugvMuxxer.launch">
+		<arg name="primary" 		value="$(arg primary)" />
+		<arg name="ugv_n" 			value="$(arg ugv_n)" />
+		<arg name="gazebo"			value="$(arg gazebo)"/>
+		<arg name="absolute_init"								value="$(arg absolute_init)" />
+		<arg name="absolute_measurements"				value="$(arg absolute_measurements)" />
+		<arg name="ugv_mux_map_serve_topic" 		value="$(arg ugv_n)/mux/map/service_topic" />
+
+		<!-- <arg name="trial_cmd_vel"						value="$(arg trial_cmd_vel)"/> -->
+		<!-- <arg name="mux_cmd_topic" 					value="$(arg mux_cmd_topic)" /> -->
+		<arg name="driver_cmd_topic"				value="$(arg driver_cmd_topic)" />
+		<arg name="move_base_cmd_topic" 		value="$(arg move_base_cmd_topic)" />
+	</include>
+
+	<group if="$(arg primary)">
+		<node ns="$(arg ugv_n)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_n)_global" args="0.0 0.0 0.0 0.0 0.0 0.0 /$(arg ugv_n)/hast/odom /global 1"/>
+	</group>
+
+	<!-- tf frames for simulating a ugv sensor -->
+	<node unless="$(arg gazebo)" pkg="tf" type="static_transform_publisher" name="ugvugvsensor_base2left_$(arg ugv_n)"  args=" 0   0.1 0.233270 0 0 0 /vicon/$(arg ugv_n)/$(arg ugv_n)    /vicon/$(arg ugv_n)/left_marker 100"/>
+	<node 		if="$(arg gazebo)" pkg="tf" type="static_transform_publisher" name="ugvugvsensor_base2left_$(arg ugv_n)"  args=" 0   0.1 0.233270 0 0 0 /gazebo/$(arg ugv_n)/base_footprint /gazebo/$(arg ugv_n)/left_marker 100"/>
+	<node unless="$(arg gazebo)" pkg="tf" type="static_transform_publisher" name="ugvugvsensor_base2right_$(arg ugv_n)" args=" 0  -0.1 0.233270 0 0 0 /vicon/$(arg ugv_n)/$(arg ugv_n)    /vicon/$(arg ugv_n)/right_marker 100"/>
+	<node 		if="$(arg gazebo)" pkg="tf" type="static_transform_publisher" name="ugvugvsensor_base2right_$(arg ugv_n)" args=" 0  -0.1 0.233270 0 0 0 /gazebo/$(arg ugv_n)/base_footprint /gazebo/$(arg ugv_n)/right_marker 100"/>
+	<node unless="$(arg gazebo)" pkg="tf" type="static_transform_publisher" name="ugvugvsensor_base2rear_$(arg ugv_n)"  args="-0.1 0.0 0.233270 0 0 0 /vicon/$(arg ugv_n)/$(arg ugv_n)    /vicon/$(arg ugv_n)/rear_marker 100"/>
+	<node 		if="$(arg gazebo)" pkg="tf" type="static_transform_publisher" name="ugvugvsensor_base2rear_$(arg ugv_n)"  args="-0.1 0.0 0.233270 0 0 0 /gazebo/$(arg ugv_n)/base_footprint /gazebo/$(arg ugv_n)/rear_marker 100"/>
+
+
+
+</launch>

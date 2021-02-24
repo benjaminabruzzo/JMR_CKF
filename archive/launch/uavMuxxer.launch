@@ -1,0 +1,36 @@
+<launch>
+	<arg name="trial" 			default="001" />
+	<arg name="date" 				default="20190814" />
+	<arg name="user" 				default="$(env USER)" />
+
+	<arg name="launcher"		default="uav_mux_$(env HOST)" />
+	
+	<arg name="shutdown_topic" 			default="/hast/shutdown" />
+	<arg name="uav_mux_topic" 			default="/uav/mux"/>
+	<arg name="navdata_topic" 			default="/ardrone/navdata"	/>
+	<arg name="tag_detection_topic"	default="/ardrone/tag_detections" />
+	<arg name="slam_poses_topic" 		default="/jointSLAM/poses"	/>
+	<arg name="uav_pose_topic" 			default="/jointSLAM/uav/estPose"	/>
+
+
+	<node 	pkg="hast" 	type="uavMuxxer"	name="uav_muxxer_$(env HOST)"	required="true" output="screen"	>
+		<param name="trial" 		value="$(arg trial)" type="str"/>
+		<param name="date" 			value="$(arg date)" type="str"/>
+		<param name="user" 			value="$(arg user)"/>
+
+		<param name="navdata_topic" 			value="$(arg navdata_topic)"/>
+		<param name="tag_detection_topic"	value="$(arg tag_detection_topic)"/>
+		<param name="uav_mux_topic" 			value="$(arg uav_mux_topic)"/>
+
+		<param name="slam_poses_topic" 		value="$(arg slam_poses_topic)"/>  <!-- output of slam increment -->
+		<param name="uav_pose_topic" 			value="$(arg uav_pose_topic)"/> <!-- currently estimated pose of UAV -->
+		
+		<param name="shutdown_topic" 			value="$(arg shutdown_topic)"/>
+
+	</node>
+
+	<node pkg="hast"	type="killhast"					name="kill_$(arg launcher)"							output="screen" required="true"/>
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+
+
+</launch>

@@ -1,0 +1,8 @@
+<launch>
+	<arg name="trial" 			default="000" />
+	<arg name="date" 				default="20181207" />
+	<arg name="user" 				default="$(env USER)" />
+	<param name="/hast/trial" 	value="$(arg trial)"  type = "str" />
+	<param name="/hast/user" 		value="$(arg user)" 	type = "str" />
+	<param name="/hast/date" 		value="$(arg date)" 	type = "str" />
+</launch>

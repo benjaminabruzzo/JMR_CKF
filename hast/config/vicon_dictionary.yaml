@@ -1,0 +1,15 @@
+body_labels:
+    - {name: gatorboard, path: /vicon/gatorboard/gatorboard}
+    - {name: ugv1, path: /vicon/ugv1/ugv1}
+    - {name: ugv2, path: /vicon/ugv2/ugv2}
+    - {name: red, path: /vicon/red/red}
+    - {name: blue, path: /vicon/blue/blue}
+    - {name: green, path: /vicon/green/green}
+    - {name: april02, path: /vicon/april02/april02}
+    - {name: april03, path: /vicon/april03/april03}
+    - {name: april05, path: /vicon/april05/april05}
+    - {name: april06, path: /vicon/april06/april06}
+    - {name: april07, path: /vicon/april07/april07}
+    - {name: april08, path: /vicon/april08/april08}
+    - {name: april10, path: /vicon/april10/april10}
+    - {name: april11, path: /vicon/april11/april11}

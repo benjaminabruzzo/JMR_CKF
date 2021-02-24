@@ -1,0 +1,57 @@
+DWAPlannerROS:
+
+# Robot Configuration Parameters
+  max_vel_x: 0.25  #0.3  # 0.5 # The maximum x velocity for the robot in m/s.
+  min_vel_x: 0.0   # 0.0 # The minimum x velocity for the robot in m/s, negative for backwards motion.
+
+  max_vel_y: 0.0   # diff drive robot # The maximum y velocity for the robot in m/s
+  min_vel_y: 0.0   # diff drive robot # The minimum y velocity for the robot in m/s
+
+  max_trans_vel: 0.35    # The absolute value of the maximum translational velocity for the robot in m/s
+  min_trans_vel: 0.1     # The absolute value of the minimum translational velocity for the robot in m/s
+  trans_stopped_vel: 0.1 #
+
+  max_rot_vel: 3.0     # 1.0
+  min_rot_vel: 0.6     # could set this lower
+  rot_stopped_vel: 0.7 #
+
+  acc_lim_x: 1.0  # The x acceleration limit of the robot in meters/sec^2
+  acc_lim_th: 2.0 # 1.0 # The rotational acceleration limit of the robot in radians/sec^2
+  acc_lim_y: 0.0  # diff drive robot
+
+# Goal Tolerance Parameters
+  yaw_goal_tolerance: 1.5   # 0.05
+  xy_goal_tolerance: 0.3194 # 0.10
+  # latch_xy_goal_tolerance: false
+
+# Forward Simulation Parameters
+# So it looks like the problem all along was I had set vx_samples and vtheta_samples too high.
+# In Groovy, setting these parameters to 50 and 200 in base_local_planner_params.yaml worked well in the case of the fake TurtleBot.
+# In Hydro, values this high appear to cause the update rate problems and the erratic robot behavior.
+# Setting vx_samples=8 and vtheta_samples=20 like I do for the real TurtleBot seems to have solved the problem. Sorry for the wild goose chase.
+  sim_time: 1.0       # 1.7
+  vx_samples: 8       # 3
+  vy_samples: 1       # diff drive robot
+  vtheta_samples: 20  # 20
+
+# Trajectory Scoring Parameters
+  forward_point_distance: 0.325 # 0.325  - how far along to place an additional scoring point
+  path_distance_bias: 32.0      # 32.0   - weighting for how much it should stick to the global path plan
+  goal_distance_bias: 24.0      # 24.0   - wighting for how much it should attempt to reach its goal
+  max_scaling_factor: 0.2       # 0.2    - how much to scale the robot's footprint when at speed.
+  stop_time_buffer: 0.2         # 0.2    - amount of time a robot must stop in before colliding for a valid traj.
+  occdist_scale: 0.025           # 0.01   - weighting for how much the controller should avoid obstacles
+  scaling_speed: 0.25           # 0.25   - absolute velocity at which to start scaling the robot's footprint (m/s?)
+
+# Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05  # 0.05   - How far the robot must travel in meters before oscillation flags are reset
+
+# Global Plan Parameters
+  prune_plan: true # true # Defines whether or not to eat up the plan as the robot moves along the path. If set to true, points will fall off the end of the plan once the robot moves 1 meter past them.
+
+# Debugging
+  publish_traj_pc : true
+  publish_cost_grid_pc: true
+
+# Differential-drive robot configuration - necessary?
+  holonomic_robot: false

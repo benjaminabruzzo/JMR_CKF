@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+ESSID="hast2020"
+PASSWORD="stevens2020"
+ADDRESS="192.168.64.125"
+DRONEIP="192.168.1.1"
+IFCONFIG="ifconfig ath0 $ADDRESS;"
+DHCPC=""

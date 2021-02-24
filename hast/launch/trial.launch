@@ -1,0 +1,158 @@
+<launch>
+	<param name="/trial/host" 	value="$(env HOST)"  type = "str" />
+
+	<arg name="launcher"										default="trial_launch_$(env HOST)" />
+	<arg name="flytime"											default="10" />
+	<arg name="wait"												default="0" />
+	<arg name="gazebo"											default="false" />
+	<arg name="iflift"											default="true" />
+	<arg name="slamtest"										default="false" />
+
+	<arg name="exp_code"										default="A" />
+	<arg name="oneUGV"											default="false" />  <!-- use this when there is only 1 ugv in the experiment -->
+	<arg name="ugv1_lookatgoal"							default="false" />
+	<arg name="ugv2_lookatgoal"							default="false" />
+	<arg name="ugv1_watchugv2"							default="false" />
+	<arg name="ugv2_watchugv1"							default="false" />
+	<arg name="ugv1_picket"									default="false" />
+	<arg name="ugv2_picket"									default="false" />
+	<arg name="ugv1_w_hover"								default="false" />
+	<arg name="ugv2_w_hover"								default="false" />
+	<arg name="both_w_hover"								default="false" />
+
+	<!-- uav control & SLAM -->
+	<arg name="uav_waypoint_cloud_pub" 			default="/hast/uav/uavWaypointCloud"/>
+	<arg name="uav_pose_state_topic"				default="/hast/uav/state" /> <!-- subscribe to the uav state topic, switched by uav_topic_switch.py -->
+	<arg name="uav_control_cli" 						default="/hast/service/uav/ControlIsOn"/>
+	<arg name="uav_slam_switch_topic"				default="/hast/service/uavslam/slam_switch" />
+	<arg name="uav_flight_state_topic"			default="/hast/uav/flightstate" />
+	<arg name="jointslam_switch_topic"			default="/hast/service/jointslam/slam_switch" />
+
+	<arg name="ugv1_TF_mux"									default="ugv1/mux/base_footprint"	/>
+	<arg name="ugv2_TF_mux"									default="ugv2/mux/base_footprint"	/>
+	<arg name="ugv1_TF_odom"								default="ugv1/hast/odom"	/>
+	<arg name="ugv2_TF_odom"								default="ugv2/hast/odom"	/>
+	<arg name="ugv1_TF_global"							default="ugv1/hast/odom"	/>
+	<arg name="ugv2_TF_global"							default="ugv1/hast/odom"	/>  <!-- yes both use ugv1 as the root -->
+
+	<arg name="ugv1_pose_sub"								default="/ugv1/mux_state/pose"	/>
+	<arg name="ugv2_pose_sub"								default="/ugv2/mux_state/pose"	/>
+	<arg name="ugv1_april_goal_id"					default="8" />
+	<arg name="ugv2_april_goal_id"					default="8" />
+
+	<arg name="ugv1_map_frame"							default="/ugv1/mux/map" />
+	<arg name="ugv2_map_frame"							default="/ugv2/mux/map" />
+
+	<arg name="ugv1_goal_tag_topic"					default="/hast/service/ugv/goal"/>
+	<arg name="ugv2_goal_tag_topic"					default="/hast/service/ugv/goal"/>
+	<arg name="ugv1_move_goal_topic"				default="/ugv1/action/goal" />
+	<arg name="ugv2_move_goal_topic"				default="/ugv2/action/goal" />
+	<arg name="ugv1_clearcostmap_topic" 		default="/move_base_ugv1/clear_costmaps" />
+	<arg name="ugv2_clearcostmap_topic"			default="/move_base_ugv2/clear_costmaps" />
+	<arg name="ugv1_goal_header_frame_id"		default="/ugv1/hast/base_footprint"	/>
+	<arg name="ugv2_goal_header_frame_id"		default="/ugv2/hast/base_footprint"	/>
+	<arg name="ugv1_movebase_status_topic"	default="/ugv1/move_base/status" />
+	<arg name="ugv2_movebase_status_topic"	default="/ugv2/move_base/status" />
+
+	<arg name="ugv1_local_plan_topic"				default="/move_base_ugv1/DWAPlannerROS/local_plan"/>
+	<arg name="ugv2_local_plan_topic"				default="/move_base_ugv2/DWAPlannerROS/local_plan"/>
+	<arg name="ugv1_global_plan_topic"			default="/move_base_ugv1/NavfnROS/plan"/>
+	<arg name="ugv2_global_plan_topic"			default="/move_base_ugv2/NavfnROS/plan"/>
+	<!-- <arg name="ugv1_global_plan_topic"		default="/move_base_ugv1/DWAPlannerROS/global_plan"/>
+	<arg name="ugv2_global_plan_topic"		default="/move_base_ugv2/DWAPlannerROS/global_plan"/> -->
+
+	<arg name="ugv1_driver_goal_topic"			default="ugv1/driver/goal" />
+	<arg name="ugv2_driver_goal_topic"			default="ugv2/driver/goal" />
+	<arg name="ugv1_driver_status_topic"		default="ugv1/driver/status" />
+	<arg name="ugv2_driver_status_topic"		default="ugv2/driver/status" />
+
+
+	<!-- End trial messages -->
+	<arg name="trial_running_topic"					default="/hast/trial_running" />
+	<arg name="killswitch_topic"						default="/hast/shutdown" />
+	<arg name="uav_land_topic"							default="/ardrone/land" />
+	<arg name="uav_zerocmd_topic"						default="/hast/uav/cmd_vel" />
+
+	<node pkg="hast" 	type="trial"	name="trial"	output="screen" required="true">
+		<param name="gazebo"									value="$(arg gazebo)"/>
+		<param name="start_wait" 							value="$(arg wait)"/>
+		<param name="flytime" 								value="$(arg flytime)" type="int"/> 	<!-- time (seconds) for uav to make and keep a waypoint-->
+
+		<!-- experiment types -->
+		<param name="iflift"									value="$(arg iflift)"/>
+		<param name="slamtest"								value="$(arg slamtest)"/>
+
+		<param name="exp/oneUGV"							value="$(arg oneUGV)"/>
+		<param name="exp/ugv1_lookatgoal"			value="$(arg ugv1_lookatgoal)"/>
+		<param name="exp/ugv2_lookatgoal"			value="$(arg ugv2_lookatgoal)"/>
+		<param name="exp/ugv1_watchugv2"			value="$(arg ugv1_watchugv2)"/>
+		<param name="exp/ugv2_watchugv1"			value="$(arg ugv2_watchugv1)"/>
+		<param name="exp/ugv1_picket"					value="$(arg ugv1_picket)"/>
+		<param name="exp/ugv2_picket"					value="$(arg ugv2_picket)"/>
+		<param name="exp/ugv1_w_hover"				value="$(arg ugv1_w_hover)"/>
+		<param name="exp/ugv2_w_hover"				value="$(arg ugv2_w_hover)"/>
+		<param name="exp/both_w_hover"				value="$(arg both_w_hover)"/>
+
+		<!-- UAV parameters -->
+		<param name="uav_waypoint_cloud_pub" 	value="$(arg uav_waypoint_cloud_pub)"/>
+		<param name="uav_pose_state_topic" 		value="$(arg uav_pose_state_topic)"/>
+		<param name="uav_control_cli"					value="$(arg uav_control_cli)" />
+		<param name="uav_flight_state_topic"	value="$(arg uav_flight_state_topic)" />
+		<param name="uav_slam_switch_topic" 	value="$(arg uav_slam_switch_topic)"	/>
+		<param name="jointslam_switch_topic" 	value="$(arg jointslam_switch_topic)"	/>
+
+		<!-- UGV parameters -->
+		<param name="ugv1_TF_mux"							value="$(arg ugv1_TF_mux)"/>
+		<param name="ugv2_TF_mux"							value="$(arg ugv2_TF_mux)"/>
+		<param name="ugv1_TF_odom"						value="$(arg ugv1_TF_odom)"/>
+		<param name="ugv2_TF_odom"						value="$(arg ugv2_TF_odom)"/>
+		<param name="ugv1_TF_global"					value="$(arg ugv1_TF_global)"/>
+		<param name="ugv2_TF_global"					value="$(arg ugv2_TF_global)"/>
+
+		<param name="ugv1_mux_map_serve_topic"		value="ugv1/mux/map/service_topic" />
+		<param name="ugv2_mux_map_serve_topic"		value="ugv2/mux/map/service_topic" />
+
+		<param name="ugv1_pose_sub"							value="$(arg ugv1_pose_sub)"/>
+		<param name="ugv2_pose_sub"							value="$(arg ugv2_pose_sub)"/>
+		<param name="ugv1_map_frame"						value="$(arg ugv1_map_frame)"/>
+		<param name="ugv2_map_frame"						value="$(arg ugv2_map_frame)"/>
+		<param name="ugv1_april_goal_id"				value="$(arg ugv1_april_goal_id)"/>
+		<param name="ugv2_april_goal_id"				value="$(arg ugv2_april_goal_id)"/>
+		<param name="ugv1_goal_tag_topic" 			value="$(arg ugv1_goal_tag_topic)"/>
+		<param name="ugv2_goal_tag_topic" 			value="$(arg ugv2_goal_tag_topic)"/>
+		<param name="ugv1_move_goal_topic"			value="$(arg ugv1_move_goal_topic)"/>
+		<param name="ugv2_move_goal_topic"			value="$(arg ugv2_move_goal_topic)"/>
+		<param name="ugv1_clearcostmap_topic" 	value="$(arg ugv1_clearcostmap_topic)"/>
+		<param name="ugv2_clearcostmap_topic" 	value="$(arg ugv2_clearcostmap_topic)"/>
+		<param name="ugv1_local_plan_topic"			value="$(arg ugv1_local_plan_topic)"/>
+		<param name="ugv2_local_plan_topic"			value="$(arg ugv2_local_plan_topic)"/>
+		<param name="ugv1_global_plan_topic"		value="$(arg ugv1_global_plan_topic)"/>
+		<param name="ugv2_global_plan_topic"		value="$(arg ugv2_global_plan_topic)"/>
+		<param name="ugv1_goal_header_frame_id" value="$(arg ugv1_goal_header_frame_id)"/>
+		<param name="ugv2_goal_header_frame_id" value="$(arg ugv2_goal_header_frame_id)"/>
+		<param name="ugv1_movebase_status_topic" value="$(arg ugv1_movebase_status_topic)"/>
+		<param name="ugv2_movebase_status_topic" value="$(arg ugv2_movebase_status_topic)"/>
+
+		<param name="ugv1_driver_goal_topic"		value="$(arg ugv1_driver_goal_topic)"/>
+		<param name="ugv2_driver_goal_topic"		value="$(arg ugv2_driver_goal_topic)"/>
+		<param name="ugv1_driver_status_topic"	value="$(arg ugv1_driver_status_topic)"/>
+		<param name="ugv2_driver_status_topic"	value="$(arg ugv2_driver_status_topic)"/>
+
+		<!-- End trial messages -->
+		<param name="killswitch_topic"					value="$(arg killswitch_topic)"	/>
+		<param name="trial_running_topic"				value="$(arg trial_running_topic)"	/>
+		<param name="uav_land_topic"						value="$(arg uav_land_topic)"	/>
+		<param name="uav_zerocmd_topic"					value="$(arg uav_zerocmd_topic)"	/>
+
+	</node>
+		<!-- <param name="ugvn_OdomSwitch_topic" 	value="/$(arg ugv_n)/service/stereo/OdomSwitch"	/> -->
+
+		<!-- <param name="local_plan_topic" 				value="/move_base_$(arg ugv_n)_$(env HOST)/DWAPlannerROS/local_plan" /> -->
+		<!-- <param name="global_plan_topic" 			value="/move_base_$(arg ugv_n)_$(env HOST)/DWAPlannerROS/global_plan" /> -->
+
+<!-- 	<group ns="hast" >
+		<node pkg="hast" type="param_logger.py" name="param_logger" output="screen" />
+	</group> -->
+
+
+</launch>

@@ -1,0 +1,17 @@
+These are consistent with what we discussed on Monday. Can you track the trace of the covariance matrix of each feature and of the state of the system?
+
+Yes, this was relatively easy to do.  Attached are three plots covering this.
+1) slam_corrections.png, this shows the adjustments to the state of the landmarks each time the slam KF is updated.  I'm not including plots of the actual estimated states, because I don't think it actually shows anything interesting, but the magnitude of these adjustments shows better when things go poorly.
+
+2) vehicle_trace.png shows a trace of the covariance block relating to each of the three vehicles as well as the overall system (landmarks inclusive).  Basically, the ground vehicles slowly increase in uncertainty, and the UAV jumps up in steps.
+
+3) landmark_trace.png shows a plot of the trace of the covariance blocks of the observed landmarks.  Each time additional landmarks are added, the covariance of all jumps.  There is a slight settling of this jump immediately after the new landmarks are added, but then all of the covariances stay constant at the new steady state.  I'm not sure why it stays constant, I would expect the covariance to decrease over time as more observations are made.
+
+
+some background information:
+The ground vehicles and the UAV cameras all make observations around 10Hz.  So the slam kf updates roughly follow a ugv1-ugv2-landmark-ugv1-ugv2-landmark-etc pattern.
+
+
+The instantaneous covariance of the new features must be large enough to cause the instability. How is it set? 
+
+

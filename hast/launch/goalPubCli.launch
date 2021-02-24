@@ -1,0 +1,42 @@
+<launch>
+	<arg name="launcher" 		default="goalPubCli_launch" />
+
+	<arg name="ugv1_april_goal_id"				default="0" />
+	<arg name="ugv2_april_goal_id"				default="9" />
+	<arg name="ugv1_map_frame"						default="/ugv1/map" />
+	<arg name="ugv2_map_frame"						default="/ugv2/map" />
+	<arg name="ugv1_goal_tag_topic" 			default="/hast/service/ugv/goal"/>
+	<arg name="ugv2_goal_tag_topic" 			default="/hast/service/ugv/goal"/>
+	<arg name="ugv1_move_goal_topic" 			default="/ugv1/action/goal" />
+	<arg name="ugv2_move_goal_topic" 			default="/ugv2/action/goal" />
+	<arg name="ugv1_clearcostmap_topic" 	default="/move_base_ugv1/clear_costmaps" />
+	<arg name="ugv2_clearcostmap_topic" 	default="/move_base_ugv2/clear_costmaps" />
+	<arg name="ugv1_movebaseresult_topic" default="/ugv1/move_base/result" />
+	<arg name="ugv2_movebaseresult_topic" default="/ugv2/move_base/result" />
+	<arg name="ugv1_goal_header_frame_id" default="/ugv1/hast/base_footprint"	/>
+	<arg name="ugv2_goal_header_frame_id" default="/ugv2/hast/base_footprint"	/>
+
+
+	<node pkg="hast"	type="goalPubCli"	name="goalPubCli"	output="screen" >
+		<!-- UGV parameters -->
+		<param name="ugv1_map_frame"						value="$(arg ugv1_map_frame)"/>
+		<param name="ugv2_map_frame"						value="$(arg ugv2_map_frame)"/>
+		<param name="ugv1_april_goal_id"				value="$(arg ugv1_april_goal_id)"/>
+		<param name="ugv2_april_goal_id"				value="$(arg ugv2_april_goal_id)"/>
+		<param name="ugv1_goal_tag_topic" 			value="$(arg ugv1_goal_tag_topic)"/>
+		<param name="ugv2_goal_tag_topic" 			value="$(arg ugv2_goal_tag_topic)"/>
+		<param name="ugv1_move_goal_topic" 			value="$(arg ugv1_move_goal_topic)"/>
+		<param name="ugv2_move_goal_topic" 			value="$(arg ugv2_move_goal_topic)"/>
+		<param name="ugv1_clearcostmap_topic" 	value="$(arg ugv1_clearcostmap_topic)"/>
+		<param name="ugv2_clearcostmap_topic" 	value="$(arg ugv2_clearcostmap_topic)"/>
+		<param name="ugv1_movebaseresult_topic" value="$(arg ugv1_movebaseresult_topic)"/>
+		<param name="ugv2_movebaseresult_topic" value="$(arg ugv2_movebaseresult_topic)"/>
+		<param name="ugv1_goal_header_frame_id" value="$(arg ugv1_goal_header_frame_id)"/>
+		<param name="ugv2_goal_header_frame_id" value="$(arg ugv2_goal_header_frame_id)"/>
+	</node>
+
+	<!-- <node pkg="hast"	type="shutdownListener"	output="screen" name="shutdownListener_$(arg launcher)"	 required="true"/> -->
+	<!-- <node pkg="rviz" 	type="rviz" name="rviz_goalCli" output="screen"/> -->  <!-- args="-d $(find ar_pose)/launch/live_multi.rviz"/> -->
+
+
+</launch>

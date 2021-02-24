@@ -1,0 +1,70 @@
+<launch>
+	<arg name="x1" default="-0.66"/>
+	<arg name="x2" default="-0.50"/>
+	<arg name="x3" default="-0.33"/>
+	<arg name="x4" default="-0.25"/>
+	<arg name="x5" default="0.00"/>
+	<arg name="x6" default="0.25"/>
+	<arg name="x7" default="0.33"/>
+	<arg name="x8" default="0.50"/>
+	<arg name="x9" default="0.66"/>
+
+	<arg name="y1" default="0.5"/>
+	<arg name="y2" default="0.0"/>
+	<arg name="y3" default="-0.5"/>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id00"/>
+		<arg name="x"   value="$(arg x5)"/>
+		<arg name="y"   value="$(arg y1)"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id01"/>
+		<arg name="x"   value="$(arg x5)"/>
+		<arg name="y"   value="$(arg y2)"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id02"/>
+		<arg name="x"   value="$(arg x5)"/>
+		<arg name="y"   value="$(arg y3)"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id03"/>
+		<arg name="x"   value="$(arg x7)"/>
+		<arg name="y"   value="$(arg y1)"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id04"/>
+		<arg name="x"   value="$(arg x7)"/>
+		<arg name="y"   value="$(arg y2)"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id05"/>
+		<arg name="x"   value="$(arg x7)"/>
+		<arg name="y"   value="$(arg y3)"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id06"/>
+		<arg name="x"   value="$(arg x9)"/>
+		<arg name="y"   value="$(arg y1)"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id07"/>
+		<arg name="x"   value="$(arg x9)"/>
+		<arg name="y"   value="$(arg y2)"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag" value="id08"/>
+		<arg name="x"   value="$(arg x9)"/>
+		<arg name="y"   value="$(arg y3)"/>
+	</include>
+
+</launch>

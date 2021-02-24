@@ -1,0 +1,16 @@
+<launch>
+	<arg name="ugv_n" 				default="ugv1" />
+	<arg name="size" 					default="8x6" />
+	<arg name="square" 				default="0.111" />
+	<arg name="left_camera" 	default="/$(arg ugv_n)/pgrstereo/left" />
+	<arg name="right_camera" 	default="/$(arg ugv_n)/pgrstereo/right" />
+	<arg name="left_image" 		default="/$(arg ugv_n)/pgrstereo/left/image_raw" />
+	<arg name="right_image" 	default="/$(arg ugv_n)/pgrstereo/right/image_raw" />
+
+
+	<node pkg="camera_calibration" 
+		type="cameracalibrator.py" 
+		name="stereo_cal" 
+		args="--size $(arg size) --square $(arg square) left:=$(arg left_image) left_camera:=$(arg left_camera) right:=$(arg right_image) right_camera:=$(arg right_camera)"/>
+
+</launch>

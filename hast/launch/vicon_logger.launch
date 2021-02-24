@@ -1,0 +1,36 @@
+<launch>
+	<arg name="gazebo" 							default="false" />
+	<arg name="metronome_type" 			default="Imu" />
+	<arg name="metronome_topic" 		default="/ardrone/imu" />
+	<arg name="record_pid" 					default="false" />
+	<arg name="tag_array_topic"			default="/ardrone/tag_detections" />
+	<arg name="time_sync_topic"			default="/hast/init_time" />
+	<arg name="time_service_topic"	default="/hast/serve/time" />
+	<arg name="ugvugvsensor_topic"	default="/hast/ugvugvsensor" />
+
+	<arg     if="$(arg gazebo)" name="world_origin"	value="/vicon/origin"/>
+	<arg unless="$(arg gazebo)" name="world_origin" value="/vicon"/>
+
+	<arg     if="$(arg gazebo)" name="logger_dictionary"	value="$(find hast_gazebo)/config/logger_dictionary.yaml"/>
+	<arg unless="$(arg gazebo)" name="logger_dictionary" 	value="$(find hast)/config/vicon_dictionary.yaml"/>
+
+	<arg name="ugv1_map_frame"		default="/ugv1/map" />
+	<arg name="ugv2_map_frame"		default="/ugv2/map" />
+
+	<group ns="hast" >
+		<node pkg="hast" type="vicon_logger.py" name="vicon_logger_$(env HOST)" output="screen" >
+			<rosparam command="load" 						file="$(arg logger_dictionary)" />
+			<param name="/gazebo" 							value="$(arg gazebo)" />
+			<param name="/record_pid" 					value="$(arg record_pid)" />
+			<param name="/world_origin" 				value="$(arg world_origin)" />
+			<param name="/tag_array_topic" 			value="$(arg tag_array_topic)" />
+			<param name="/time_sync_topic"			value="$(arg time_sync_topic)" />
+			<param name="/time_service_topic"		value="$(arg time_service_topic)" />
+			<param name="/ugv1_map_frame"				value="$(arg ugv1_map_frame)" />
+			<param name="/ugv2_map_frame"				value="$(arg ugv2_map_frame)" />
+			<param name="/ugvugvsensor_topic"		value="$(arg ugvugvsensor_topic)" />
+		</node>
+	</group>
+
+
+</launch>

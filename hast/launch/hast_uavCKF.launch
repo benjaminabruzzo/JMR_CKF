@@ -1,0 +1,52 @@
+<!-- -*- mode: XML -*-  -->
+
+<launch>
+	<!-- <arg name="launcher" 									default="hast_uavCKF" /> -->
+	<arg name="gazebo"										default="false" />
+	<arg name="use_compassbias"						default="false"/>
+
+	<arg name="shutdown_topic"						default="/hast/shutdown" />
+	<arg name="navdata_topic"							default="/ardrone/navdata" />
+	<arg name="uav_navdata_topic" 				default="/ardrone/navdata" />
+	<arg name="uav_cmdvel_topic"					default="/hast/uav/cmd_vel" />
+
+	<arg name="uav_navdata_file"					default="uav_ckf_navdata" />
+	<arg name="uav_data_filename"					default="uav_ckf" />
+
+	<arg name="uav_states_service"				default="/hast/service/uav/state" />
+	<arg name="ckf_share_serv_topic"			default="/ckfshare/uav_ckf/service" />
+
+	<arg name="max_number_of_tags" 				default="20"/>
+	<arg name="ref_TF_frame" 							default="/map"/>
+	<arg name="uav_state_topic"						default="/ckf/uav/state"/> <!-- base station publishes the state, ugv2 uses the state for its dkf, uav_topic_switch uses it for uav control -->
+	<arg name="uav_pose_topic"						default="/ckf/uav/pose"/>
+	<!-- <arg name="uav_TF_frame" 							default="/hast/uav/base_frame"/> -->
+	<arg name="uav_TF_frame" 							default="/ckf/uav/base_frame"/>
+	<arg name="tag_detection_topic"				default="/ardrone/tag_detections"/>
+
+	<node 	pkg="hast" 	type="uavCKF"	name="uavCKF_$(env HOST)"	output="screen">
+		<param name="gazebo"								value="$(arg gazebo)"/>
+		<param name="use_compassbias" 			value="$(arg use_compassbias)"/>
+
+		<param name="TF_oneckf_parent" 			value="$ugv1/hast/odom"/>
+		<param name="TF_oneckf_child" 			value="$ugv1/ckf/uav_base_link"			/>
+		<param name="TF_uav_slam_gl" 				value="$(arg uav_TF_frame)"/>
+
+		<param name="uav_navdata_file"			value="$(arg uav_navdata_file)"/>
+		<param name="uav_data_filename" 		value="$(arg uav_data_filename)"/>
+
+		<param name="uav_imu_yawdriftrate"	value="0"/>
+		<param name="tag_max_id"						value="30" type="int"/>
+		<param name="tag_detection_topic"		value="/ardrone/tag_detections"/>
+
+		<param name="shutdown_topic" 				value="$(arg shutdown_topic)"/>
+		<param name="navdata_topic" 				value="$(arg navdata_topic)"/>
+		<param name="uav_cmdvel_topic" 			value="$(arg uav_cmdvel_topic)"/>
+		<param name="uav_state_topic" 			value="$(arg uav_state_topic)"/>
+		<param name="uav_pose_topic" 				value="$(arg uav_pose_topic)"/>
+
+		<param name="ckf_share_serv_topic" 	value="$(arg ckf_share_serv_topic)"/>
+
+	</node>
+
+</launch>

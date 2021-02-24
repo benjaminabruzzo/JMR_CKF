@@ -1,0 +1,49 @@
+<launch>
+	<!-- experiment specific args -->
+	<arg name="ugv_n"								default="ugv1" />
+	<arg name="primary" 						default="true" />
+	<arg name="tb_base"							default="kobuki" />
+	<arg name="launcher"						default="$(arg ugv_n)_launch" />
+	<arg name="raw_wheel_cmd_topic" default="$(arg ugv_n)/cmd_vel_raw" />
+	<arg name="ugv_x_limit"					default="0.15" />
+	<arg name="ugv_w_limit"					default="0.2" />
+	<arg name="cost_scaling_factor" default="7" />
+	<param name="/trial/$(arg ugv_n)/host" 	value="$(env HOST)" type = "str" />
+	<!-- <arg name="left_image_topic" 			default="/$(arg ugv_n)/pgrstereo/left/image_raw" /> -->
+	<arg name="left_image_topic" 			default="/$(arg ugv_n)/pgrstereo/left/image_rect" />
+	<!-- <arg name="right_image_topic" 		default="/$(arg ugv_n)/pgrstereo/right/image_raw" /> -->
+	<arg name="right_image_topic" 		default="/$(arg ugv_n)/pgrstereo/right/image_rect" />
+	<arg name="saveraw_image_topic" 	default="/hast/saveraw" />
+
+
+	<!-- <include file="$(find hast)/cam_info/calibration/launch/cal_trigger.launch">
+		<arg name="ugv_n"									value="$(arg ugv_n)" />
+		<arg name="left_image_topic" 			value="$(arg left_image_topic)" />
+		<arg name="right_image_topic" 		value="$(arg right_image_topic)" />
+		<arg name="saveraw_image_topic" 	value="$(arg saveraw_image_topic)" />
+	</include> -->
+
+	<include file="$(find hast)/launch/kobuki/kobuki_driver.launch">
+		<arg name="ugv_n"								value="$(arg ugv_n)" />
+		<arg name="speed_lim_v" 				value="$(arg ugv_x_limit)" />
+		<arg name="speed_lim_w"					value="$(arg ugv_w_limit)" />
+		<arg name="odom_frame"					value="/$(arg ugv_n)/hast/odom"/>
+		<arg name="base_frame"					value="/$(arg ugv_n)/hast/base_footprint"/>
+		<arg name="raw_wheel_cmd_topic" value="$(arg raw_wheel_cmd_topic)" />
+	</include>
+
+	<include file="$(find hast)/launch/kobuki/$(env HOST)_pgr.launch">
+		<arg name="ugv_n" value="$(arg ugv_n)" />
+	</include>
+
+
+
+</launch>
+
+
+	<!-- Launch Rviz -->
+<!-- 	<arg name="rvizconfig" 					default="$(find hast)/config/rviz/ugvn_$(env HOST).rviz" />
+	<node pkg="rviz"  type="rviz" 	name="$(env HOST)_rviz" 	args="-d $(arg rvizconfig)"/>
+	<include file="$(find hast)/launch/kobuki/kobuki_ugvn_TFdescription.launch">
+		<arg name="ugv_ns" 		value="$(arg ugv_n)" />
+	</include> -->

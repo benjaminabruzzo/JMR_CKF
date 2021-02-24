@@ -1,0 +1,36 @@
+<launch>
+	<!-- Lazy shutoff -->
+	<arg name="launcher"	default="spawn_uav_$(env HOST)" />
+
+	<arg name="user" 			default="$(env USER)" />
+	<arg name="date"			default="20190207"/>
+	<arg name="trial"			default="001"/>
+
+	<node pkg="hast"		type="killhast"		 			output="screen" name="killhast_$(arg launcher)"		 			required="true"/>
+	<node pkg="hast"		type="shutdownListener" output="screen" name="shutdownListener_$(arg launcher)" required="true"/>
+	
+	<!-- UAV TF for Rviz  -->
+	<arg name="UAV_ns" 						default="UAV" />
+	<arg name="uav_model" 				default="$(find robot_descriptions)/UAV/urdf/ardrone_rviz.urdf.xacro"/> 
+	<param name="UAV_description" command="$(find xacro)/xacro --inorder $(arg uav_model)" />
+
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_driver2odom" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /map /ardrone_autonomy/odom 1"/> 
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_driver2base" 
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /hast/uav/ardrone_base_link /vicon/uav/base_footprint 1"/> 
+
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_base2red" 
+		args="0.0 -0.22 -0.01 0.0 0.0 0.0 /vicon/uav/base_footprint /vicon/uav/ardrone_red_led 1"/> 
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_base2blue" 
+		args="0.0 0.22 -0.01 0.0 0.0 0.0 /vicon/uav/base_footprint /vicon/uav/ardrone_blue_led 1"/> 
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_base2green" 
+		args="-0.22 0.0 -0.01 0.0 0.0 0.0 /vicon/uav/base_footprint /vicon/uav/ardrone_green_led 1"/> 
+
+	<include file="$(find hast)/launch/hast_uav.launch">
+		<arg name="date" 		value="$(arg date)"/>
+		<arg name="trial" 	value="$(arg trial)" />
+		<arg name="user" 		value="$(arg user)" />
+	</include>
+
+</launch>
+

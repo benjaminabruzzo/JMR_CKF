@@ -1,0 +1,5 @@
+vector3 goalP   # general goal position for ugv
+float64 goalYaw # general goal yaw for ugv
+---
+# bool at_yaw # unnecessary bool response from service
+# bool at_pos # unnecessary bool response from service

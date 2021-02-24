@@ -1,0 +1,18 @@
+<launch>
+
+	<arg name="id00_model" 	default="$(find robot_descriptions)/tags/urdf/id00_16h5.urdf.xacro"/>
+	<arg name="id03_model" 	default="$(find robot_descriptions)/tags/urdf/id03_16h5.urdf.xacro"/>
+	<arg name="id04_model" 	default="$(find robot_descriptions)/tags/urdf/id04_16h5.urdf.xacro"/>
+	<arg name="id07_model" 	default="$(find robot_descriptions)/tags/urdf/id07_16h5.urdf.xacro"/>
+	
+	<param name="id00_description" command="$(find xacro)/xacro --inorder $(arg id00_model)" />
+	<param name="id03_description" command="$(find xacro)/xacro --inorder $(arg id03_model)" />
+	<param name="id04_description" command="$(find xacro)/xacro --inorder $(arg id04_model)" />
+	<param name="id07_description" command="$(find xacro)/xacro --inorder $(arg id07_model)" />
+	
+
+<!-- 	<node pkg="hast" type="tag_tfrviz_init.py" name="tag_tfrviz_init" output="screen" >
+		<param name="map_topic" 		value="/map"/>
+	</node> -->
+
+</launch>

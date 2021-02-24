@@ -1,0 +1,12 @@
+figure(7); clf; current_fig = gcf; disp(['figure(' num2str(current_fig.Number) ') ..']); clear current_fig
+    title([meta.date meta.run '  ugv1 y pose']); ylabel('y [m]'); xlabel('time [s]'); grid on
+    hold on; 
+      linewidth = 3; ii = 0; legend_cells = {}; 
+      try h = plot(data.ugv1_mux.est.time,  data.ugv1_mux.est.Position_gl(:,2),  'bs', 'displayname', 'ugv1 y (slam)');  ii = ii+1; legend_cells{ii} = h.DisplayName; catch Mexc_; disp([Mexc_.identifier ' :: ' Mexc_.message]); end
+%       try h = plot(data.ugv1_mux.wheel.time,   data.ugv1_mux.wheel.P_odom(:,2),  'b.', 'displayname', 'ugv1 y (wheel)');  ii = ii+1; legend_cells{ii} = h.DisplayName; catch Mexc_; disp([Mexc_.identifier ' :: ' Mexc_.message]); end
+      try h = plot(data.ugv1_ckf.dkf.time,  data.ugv1_ckf.dkf.ugv.EstP_gl(:,2),  'm*', 'displayname', 'ugv1 y dkf');     ii = ii+1; legend_cells{ii} = h.DisplayName; catch Mexc_; disp([Mexc_.identifier ' :: ' Mexc_.message]); end
+      try h = plot(data.ugv1_ckf.ckf.time,      data.ugv1_ckf.ckf.EstP_gl(:,2),  'r^', 'displayname', 'ugv1 y ckf');     ii = ii+1; legend_cells{ii} = h.DisplayName; catch Mexc_; disp([Mexc_.identifier ' :: ' Mexc_.message]); end
+      try h = plot(data.vicon.time,           data.vicon.ugv1.position.gl(:,2),        'displayname', 'ugv1 y actual', 'Color', [0.75,0.75,0.75], 'LineWidth', linewidth);   ii = ii+1; legend_cells{ii} = h.DisplayName;  catch Mexc_; disp([Mexc_.identifier ' :: ' Mexc_.message]); end
+    hold off;
+    try legend(legend_cells,'Location','northwest','NumColumns',1); legend('boxoff'); catch Mexc_; disp([Mexc_.identifier ' :: ' Mexc_.message]); end
+    clear h ii legend_cells linewidth   

@@ -1,0 +1,64 @@
+<launch>
+	<!-- ugv2 -->
+	<arg name="ugv_n"						default="ugv2"/>
+	<arg name="primary" 				default="false" />
+	<arg name="showcircles"			default="false" />
+	<arg name="showYUV" 				default="false" />
+	<arg name="showBool" 				default="false" />
+	<arg name="save_images" 		default="false" />
+	<arg name="exp_code"				default="A" />
+
+	<arg name="absolute_init"						default="false"/>
+	<arg name="absolute_measurements"		default="false"/>
+
+	<arg name="move_base_cmd_topic"			default="$(arg ugv_n)/move_base/cmd_vel"/>
+	<arg name="driver_cmd_topic"				default="$(arg ugv_n)/driver/cmd_vel"/>
+	<!-- <commandTopic>${X_ROBOT_NAMESPACE}/driver/cmd_vel</commandTopic> -->
+
+	<include file="$(find robot_descriptions)/UGV_n/launch/spawn_ugv.launch">
+		<arg name="ugv_ns" 								value="$(arg ugv_n)" />
+		<arg name="move_base_ns" 					value="$(arg ugv_n)" />
+		<arg name="move_base_cmd_topic"		value="$(arg move_base_cmd_topic)" />
+		<!-- <commandTopic>${X_ROBOT_NAMESPACE}/driver/cmd_vel</commandTopic> -->
+		<!-- <arg name="driver_cmd_topic"		default="$(arg ugv_n)/driver/cmd_vel"/> -->
+
+		<arg name="x" value="-2.50"/>
+		<arg name="y" value="-0.25"/>
+		<arg name="z" value=" 0.00"/>
+		<arg name="R" value=" 0.00"/>
+		<arg name="P" value=" 0.00"/>
+		<arg name="Y" value=" 0.00"/>
+
+		<!-- <arg name="x" value="-2.00"/> -->
+		<!-- <arg name="y" value=" 0.50"/> -->
+		<!-- <arg name="z" value=" 0.00"/> -->
+		<!-- <arg name="R" value=" 0.00"/> -->
+		<!-- <arg name="P" value=" 0.00"/> -->
+		<!-- <arg name="Y" value="-0.25"/> -->
+
+
+		<arg name="mux_map_tf" 							value="true" />
+	</include>
+
+	<include file="$(find hast)/launch/hast_ugv.launch">
+		<arg name="primary" 								value="$(arg primary)" />
+		<arg name="gazebo"									value="true" />
+		<arg name="ugv_n" 									value="$(arg ugv_n)" />
+		<arg name="showcircles"						 	value="$(arg showcircles)" />
+		<arg name="showYUV" 								value="$(arg showYUV)" />
+		<arg name="showBool" 								value="$(arg showBool)" />
+		<arg name="save_images" 						value="$(arg save_images)" />
+
+		<arg name="absolute_init" 					value="$(arg absolute_init)" />
+		<arg name="absolute_measurements" 	value="$(arg absolute_measurements)" />
+
+		<arg name="driver_cmd_topic"				value="$(arg driver_cmd_topic)" />
+		<arg name="move_base_cmd_topic" 		value="$(arg move_base_cmd_topic)" />
+
+	</include>
+
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg ugv_n)"	output="screen"	required="true"/>
+
+
+
+</launch>

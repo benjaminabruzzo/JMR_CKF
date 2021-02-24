@@ -1,0 +1,42 @@
+<launch>
+	<arg name="gazebo" 								default="false" />
+	<arg name="launcher" 							default="hast_n" />
+	<arg name="user" 									default="$(env USER)" />
+	<arg name="uavSLAM"								default="false"/>
+	<arg name="jointSLAM"							default="true"/>
+	<arg name="absolute_measurements" default="false"/>
+	<arg name="jointslam_state_flag"  default="/hast/jointslam/slamstate" />
+
+	<!-- Environment specific params -->
+
+	<!-- <include file="$(find hast)/launch/hast_ugv.launch">
+		<arg name="primary" 							value="true" />
+		<arg name="ugv_n" 								value="ugv1" />
+		<arg name="gazebo" 								value="$(arg gazebo)" />
+		<arg name="PixelScale"						value="10.0"  type="double" />
+		<arg name="jointslam_state_flag" 	value="$(arg jointslam_state_flag)"/>
+		<arg name="absolute_measurements" value="$(arg absolute_measurements)" />
+	</include> -->
+
+	<!-- <include file="$(find hast)/launch/hast_ugv.launch">
+		<arg name="primary" 							value="false" />
+		<arg name="ugv_n" 								value="ugv2" />
+		<arg name="gazebo"								value="$(arg gazebo)" />
+		<arg name="jointslam_state_flag" 	value="$(arg jointslam_state_flag)"/>
+		<arg name="absolute_measurements" value="$(arg absolute_measurements)" />
+	</include> -->
+
+	<!-- <include file="$(find hast)/launch/hast_uav.launch">
+		<arg name="ugv_n" 								value="ugv1" />
+		<arg name="uav_state_sub" 				value="/ugv1/uav/state" />
+		<arg name="uavSLAM" 							value="$(arg uavSLAM)" />
+	</include> -->
+
+	<include file="$(find hast)/launch/hast_jointSLAM.launch">
+		<arg name="numberOfUGV" 					value="2" />
+		<arg name="jointslam_state_flag" 	value="$(arg jointslam_state_flag)"/>
+		<arg name="absolute_measurements" value="$(arg absolute_measurements)" />
+	</include>
+
+
+</launch>

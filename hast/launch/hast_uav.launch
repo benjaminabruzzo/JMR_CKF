@@ -1,0 +1,40 @@
+<launch>
+	<arg name="ugv_n" 		default="ugv1" />
+	<arg name="launcher" 	default="hast_uav_$(env HOST)" />
+	<arg name="trial" 		default="000" />
+	<arg name="date" 			default="20181207" />
+	<arg name="user" 			default="$(env USER)" />
+	<arg name="uavSLAM"		default="false"/>
+	<arg name="uav_state_sub" 					default="/hast/uav/state" />
+	<arg name="uav_cmd_topic" 					default="/hast/uav/cmd_vel" />
+	<arg name="ugvEstimatedState_sub" 	default="/$(arg ugv_n)/ckf_state"/>
+
+	<!-- <include file="$(find hast)/launch/navdata_echo.launch"/> -->
+	<include file="$(find hast)/launch/hast_uavAutopilot.launch">
+		<arg name="uav_state_sub" 					value="$(arg uav_state_sub)"/>
+		<arg name="uav_cmd_topic" 					value="$(arg uav_cmd_topic)"/>
+		<arg name="ugvEstimatedState_sub" 	value="$(arg ugvEstimatedState_sub)"/>
+	</include>
+
+	<!-- <group if="$(arg uavSLAM)">
+		<include file="$(find hast)/launch/hast_uavSLAM.launch">
+			<arg name="trial" 		value="$(arg trial)" />
+			<arg name="date" 			value="$(arg date)" />
+			<arg name="user" 			value="$(arg user)" />
+		</include>
+	</group> -->
+
+	<arg name="down_image"  		default="image_rect" />
+	<arg name="tf_x_offset" 		default="0.0" />
+	<include file="$(find hast)/launch/hast_april_bottomcam.launch">
+		<!-- <arg name="ugv_n" 				value="$(arg ugv_n)"/> -->
+		<arg name="image" 				value="$(arg down_image)"/>
+		<arg name="tf_x_offset" 	value="$(arg tf_x_offset)"/>
+	</include>
+
+
+	<!-- <node pkg="hast"			type="killhast"		 			output="screen" required="true" name="kill_$(arg launcher)"/> -->
+	<!-- <node pkg="hast"			type="shutdownListener" output="screen" required="true" name="shutdownListener_$(arg launcher)"/> -->
+
+
+</launch>

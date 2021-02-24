@@ -1,0 +1,75 @@
+<robot name="ardrone_uav" xmlns:xacro="http://ros.org/wiki/xacro">
+	<xacro:property name="X_ROBOT_NAMESPACE" value="uav" />
+  <xacro:property name="material_red">
+    <material name="red">
+      <color rgba="1 0 0 1"/>
+    </material>
+  </xacro:property>
+  <xacro:property name="material_blue">
+    <material name="blue">
+      <color rgba="0.0 0.0 1.0 1"/>
+    </material>
+  </xacro:property>
+  <xacro:property name="material_green">
+    <material name="green">
+      <color rgba="0.0 0.8 0.0 1"/>
+    </material>
+  </xacro:property>
+
+	<link name="${X_ROBOT_NAMESPACE}/base_footprint">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://robot_descriptions/UAV/meshes/ardrone_4.dae"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name="red_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="${X_ROBOT_NAMESPACE}/base_footprint"/>
+		<child link="${X_ROBOT_NAMESPACE}/red_led"/>
+	</joint>
+	<link name="${X_ROBOT_NAMESPACE}/red_led">
+		<visual>
+			<origin xyz="0.0 -0.22 -0.01" rpy="0 0 0" />
+			<geometry>
+				<sphere radius="0.02"/>
+			</geometry>
+			<material name="red"/>
+		</visual>
+	</link>
+
+	<joint name="blue_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="${X_ROBOT_NAMESPACE}/base_footprint"/>
+		<child link="${X_ROBOT_NAMESPACE}/blue_led"/>
+	</joint>
+	<link name="${X_ROBOT_NAMESPACE}/blue_led">
+		<visual>
+			<origin xyz="0.0 0.22 -0.01" rpy="0 0 0" />
+			<geometry>
+				<sphere radius="0.02"/>
+			</geometry>
+			<material name="blue"/>
+		</visual>
+	</link>
+
+	<joint name="green_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="${X_ROBOT_NAMESPACE}/base_footprint"/>
+		<child link="${X_ROBOT_NAMESPACE}/green_led"/>
+	</joint>
+	<link name="${X_ROBOT_NAMESPACE}/green_led">
+		<visual>
+			<origin xyz="-0.22 0.0 -0.01" rpy="0 0 0" />
+			<geometry>
+				<sphere radius="0.02"/>
+			</geometry>
+			<material name="green"/>
+		</visual>
+	</link>
+
+
+</robot>
+

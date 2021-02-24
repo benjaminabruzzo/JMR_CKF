@@ -1,0 +1,25 @@
+<launch>
+	<arg name="ugv_n"									default="ugv1" />
+	<arg name="calibration_date"			default="20200117" />
+	<arg name="calibration_filename"	default="$(arg ugv_n)_vicon_data" />
+	<arg name="image_folder_path" 		default="/home/benjamin/ros/data/calibrations/$(arg calibration_date)/$(arg ugv_n)/raw" />
+	<arg name="left_image_topic"			default="/left/image_raw" />
+	<arg name="right_image_topic" 		default="/right/image_raw" />
+	<arg name="saveraw_image_topic" 	default="/hast/saveraw" />
+
+	<arg name="world_origin"				value="/vicon"/>
+	<arg name="logger_dictionary" 	value="$(find hast)/config/vicon_dictionary.yaml"/>
+
+	<node pkg="hast" type="recordCal.py" name="recordCal_$(env HOST)" output="screen" >
+		<param name="calibration_filename"	value="$(arg calibration_filename)" />
+		<param name="calibration_date"			value="$(arg calibration_date)" />
+		<param name="/world_origin" 				value="$(arg world_origin)" />
+		<param name="image_folder_path"			value="$(arg image_folder_path)" />
+		<param name="left_image_topic"			value="$(arg left_image_topic)" />
+		<param name="right_image_topic"			value="$(arg right_image_topic)" />
+		<param name="saveraw_image_topic"		value="$(arg saveraw_image_topic)" />
+		<rosparam command="load"						file="$(arg logger_dictionary)" />
+	</node>
+
+
+</launch>

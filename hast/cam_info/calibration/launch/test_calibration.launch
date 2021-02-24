@@ -1,0 +1,49 @@
+<launch>
+	<arg name="ugv_n"										default="ugv1" />
+	<arg name="save_data_filename"			default="$(arg ugv_n)_test_cal" />
+	<arg name="save_data_path" 					default="/home/benjamin/ros/data" />
+	<arg name="left_image_topic"				default="/$(arg ugv_n)/pgrstereo/left/image_rect" />
+	<arg name="right_image_topic" 			default="/$(arg ugv_n)/pgrstereo/right/image_rect" />
+	<arg name="ugv_points_topic"				default="/ugv_points" />
+	<arg name="gator_points_topic"			default="/gator_points" />
+	<arg name="stereo_points_topic"			default="/stereo_points" />
+	<arg name="ugv_header_frame_id"			default="/vicon/$(arg ugv_n)/$(arg ugv_n)" />
+	<!-- <arg name="ugv_header_frame_id"			default="/$(arg ugv_n)/calibration/stereo_center" /> -->
+	<arg name="gator_header_frame_id"		default="/vicon/gatorboard/gatorboard" />
+	<arg name="stereo_header_frame_id"	default="/$(arg ugv_n)/calibration/stereo_center" />
+
+	<arg name="world_origin"				value="/vicon"/>
+	<arg name="logger_dictionary" 	value="$(find hast)/config/vicon_dictionary.yaml"/>
+
+	<arg name="Hcam2ugv_param_file"		default="$(find hast)/cam_info/ugvn/$(arg ugv_n)_H_cam2ugv.yaml" />
+
+		<node ns="$(arg ugv_n)" pkg="tf" type="static_transform_publisher" name="$(arg ugv_n)_calibration_stereo_center_tf"
+			args="0.0 0.0 0.0 -1.57079632679 0 -1.22173047640
+			/vicon/$(arg ugv_n)/$(arg ugv_n)	/$(arg ugv_n)/calibration/stereo_center 100"/>
+
+
+	<node pkg="hast" type="test_stereoCal.py" name="test_stereoCal_$(env HOST)" output="screen" >
+		<rosparam command="load"							file="$(arg logger_dictionary)" />
+		<rosparam command="load"							file="$(arg Hcam2ugv_param_file)" />
+		<param name="ugv_n" 									value="$(arg ugv_n)" />
+		<param name="world_origin"						value="$(arg world_origin)" />
+		<param name="save_data_filename"			value="$(arg save_data_filename)" />
+		<param name="save_data_path"					value="$(arg save_data_path)" />
+		<param name="left_image_topic"				value="$(arg left_image_topic)" />
+		<param name="right_image_topic"				value="$(arg right_image_topic)" />
+		<param name="ugv_points_topic"				value="$(arg ugv_points_topic)" />
+		<param name="gator_points_topic"			value="$(arg gator_points_topic)" />
+		<param name="stereo_points_topic"			value="$(arg stereo_points_topic)" />
+		<param name="ugv_header_frame_id"			value="$(arg ugv_header_frame_id)" />
+		<param name="gator_header_frame_id"		value="$(arg gator_header_frame_id)" />
+		<param name="stereo_header_frame_id"	value="$(arg stereo_header_frame_id)" />
+	</node>
+
+	<arg name="rvizconfig" 	default="$(find hast)/cam_info/calibration/config/$(env HOST)_cal.rviz" />
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rvizconfig)"/>
+
+
+
+
+
+</launch>

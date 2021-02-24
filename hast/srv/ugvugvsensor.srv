@@ -1,0 +1,13 @@
+string requesting_ugv
+string observed_ugv
+---
+# geometry_msgs/Vector3 ugv_position_left
+# geometry_msgs/Vector3 ugv_position_right
+bool in_FOV
+
+geometry_msgs/Vector3 left_cam_left_marker
+geometry_msgs/Vector3 left_cam_right_marker
+geometry_msgs/Vector3 left_cam_rear_marker
+geometry_msgs/Vector3 right_cam_left_marker
+geometry_msgs/Vector3 right_cam_right_marker
+geometry_msgs/Vector3 right_cam_rear_marker

@@ -1,0 +1,4 @@
+<launch>
+	<node ns="ugv1" pkg="tf" type="static_transform_publisher" name="ugv1_global" 
+					args="0.0 0.0 0.0 0.0 0.0 0.0 /ugv1/hast/odom /global 1"/> 
+</launch>

@@ -1,0 +1,32 @@
+<launch>
+	<param name="/hast/date" 				value="20191209"/>
+	<param name="/hast/trial" 			value="004"/>
+	<param name="/trial/host" 			value="$(env HOST)" type = "str" />
+	
+	<param name="/trial/ugv1/host" 	value="$(env HOST)" type = "str" />
+	<param name="/ugv1_stereoObs_$(env HOST)/PixelScale"					value="1.0"/>
+
+	<arg unless="$(arg gazebo)" name="color_param_file" 	value="$(find hast)/config/stereo_b92_params.yaml"/>
+	<arg     if="$(arg gazebo)" name="color_param_file" 	value="$(find hast)/config/stereo_gazebo_params.yaml"/>
+	<arg unless="$(arg gazebo)" name="stereo_param_file"	value="$(find hast)/cam_info/ugvn/$(arg ugv_n)_pgr_params.yaml"/>
+	<arg     if="$(arg gazebo)" name="stereo_param_file"	value="$(find robot_descriptions)/UGV_n/config/gazebo_pgr_params.yaml"/>
+
+
+	<param name="/jointSLAM/uavCovInit" 		value="0.001"/> <!-- initial value for cov diagonal -->
+	<param name="/jointSLAM/ugvCovInit" 		value="0.001"/> <!-- initial value for cov diagonal -->
+	<param name="/jointSLAM/aprilCovInit" 	value="0.05"/> <!-- initial value for cov diagonal -->
+	<param name="/jointSLAM/growCovU" 			value="0.0"/> <!-- initial value for cov diagonal -->
+	<param name="/jointSLAM/uavQdkScale" 		value="0.0"/>  <!-- scale factor for Qdk immediately after any update -->
+	<param name="/jointSLAM/uavQwScale"  		value="0.0001"/>
+	<param name="/jointSLAM/ugvQwScale"  		value="0.0001"/>
+	<param name="/jointSLAM/RkScale"				value="0.1"/>
+	<param name="/jointSLAM/RkXYZ"					value="1.0"/>
+	<param name="/jointSLAM/RkYaw"					value="1.0"/>
+
+	
+
+	<group ns="hast" >
+		<node pkg="hast" type="param_logger.py" name="param_logger" output="screen" />
+	</group>
+
+</launch>

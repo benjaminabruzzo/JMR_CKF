@@ -1,0 +1,13 @@
+<!-- -*- mode: XML -*- -->
+<launch>
+	<arg name="ip" 				default="192.168.10.125" /> <!-- ARDrone Autoconnect will default to this address -->
+	<arg name="cmd_topic" default="hast/uav/cmd_vel" />
+
+	<node pkg="ardrone_autonomy" type="ardrone_driver" name="ardrone_autonomy" clear_params="true" args="-ip $(arg ip)" output="screen" >
+		<param name="tf_prefix" value="ardrone_autonomy" />
+		<param name="realtime_navdata" value="true" />
+		<param name="realtime_video" value="true" />
+		<param name="looprate" value="50" /> <!-- Tunes the speed at which the ros loop runs, and thus, the rate at which navdata is published -->
+		<remap from="/cmd_vel" to="$(arg cmd_topic)"/>
+	</node>
+</launch>

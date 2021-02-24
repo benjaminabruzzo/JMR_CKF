@@ -1,0 +1,58 @@
+alias build_hast='. ~/ros/build_hast.bash'
+export PATH=$PATH:~/ros/src/metahast/scripts/bin
+export SCREENRC="~/.screenrc"
+
+alias ares='benjamin@ares.local'
+alias argo='benjamin@argo.local'
+alias atlas='benjamin@atlas.local'
+alias hermes='benjamin@hermes.local'
+alias pisa='benjamin@pisa.local'
+alias titan='benjamin@titan.local'
+
+
+################## \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ ###########################
+#Define the wifi ip address variable wifADDR (will supercede ethernet if wifi is available
+eth0ADDR=$(ifconfig enp0s31f6  | grep 'inet addr:'| cut -d: -f2 | awk '{ print $1}')
+wifiADDR=$(ifconfig wlp4s0  | grep 'inet addr:'| cut -d: -f2 | awk '{ print $1}')
+
+
+if [ $wifiADDR ]; then
+		ADDR=$wifiADDR
+else
+		ADDR=$eth0ADDR
+fi
+
+if [ -f /opt/ros/kinetic/setup.bash ] ; then
+    source /opt/ros/kinetic/setup.bash
+else
+    echo "ROS is not installed yet. After installing, please"
+    echo "source your .bashrc again by typing:"
+    echo "source ~/.bashrc"
+fi
+
+export ROS_PACKAGE_PATH=~/ros:$ROS_PACKAGE_PATH
+export ROS_CATKIN_DIR=~/ros/
+# export ROS_HOSTNAME=localhost
+export ROBOT_IP=$ADDR
+export IP_$HOSTNAME=$ADDR
+export ROS_HOSTNAME=$ADDR
+# export ROS_MASTER_URI=http://localhost:11311
+export ROS_MASTER_URI=http://$ADDR:11311
+export EDITOR='emacs -nw'
+export ROS_PARALLEL_JOBS=-j4
+
+echo ${HOST}_IP: $ADDR
+echo ROS_MASTER_URI: $ROS_MASTER_URI
+source ~/ros/devel/setup.bash
+
+rm ~/ros/src/metahast/hast/config/bashros/$HOST
+echo $ADDR >> ~/ros/src/metahast/hast/config/bashros/$HOST
+
+# Add this to actual bashrc file
+# . ~/ros/src/metahast/hast/config/bashros/$HOST.bashros
+
+################## /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ /\ ########################
+
+. ~/ros/src/metahast/hast/config/bashros/.bashgazebo
+
+cd ~/ros/src/metahast

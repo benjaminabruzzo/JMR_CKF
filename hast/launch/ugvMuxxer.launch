@@ -1,0 +1,88 @@
+<launch>
+	<arg name="date" 				default="20190829" />
+	<arg name="user" 				default="$(env USER)" />
+	<arg name="trial" 			default="001" />
+	<arg name="ugv_n" 			default="ugv1" />
+	<arg name="primary" 		default="false" />
+	<arg name="gazebo"			default="false" />
+	<arg name="launcher"		default="$(arg ugv_n)_mux_$(env HOST)" />
+	<arg name="absolute_init"					default="false"/>
+	<arg name="absolute_measurements"	default="false"/>
+
+	<arg name="ugv_matlab_field" 		default="$(arg ugv_n)_muxRecorder" />
+	<arg name="ugv_data_filename" 	default="$(arg ugv_n)_mux" />
+
+	<arg name="driver_cmd_topic"			default="$(arg ugv_n)/driver/cmd_vel" />
+	<arg name="driver_goal_topic"			default="$(arg ugv_n)/driver/goal" />
+	<arg name="driver_status_topic"		default="$(arg ugv_n)/driver/status" />
+	<arg name="move_base_cmd_topic" 	default="$(arg ugv_n)/move_base/cmd_vel" />
+	<arg name="trial_goal_pose_topic"	default="$(arg ugv_n)/trial/goal_pose" />
+	<!-- might delete both of these -->
+		<!-- <arg name="mux_cmd_topic" 				default="$(arg ugv_n)/mux/cmd_vel" /> -->
+		<!-- <arg name="trial_cmd_vel" 				default="$(arg ugv_n)/trial/cmd_vel" /> -->
+	<!-- might delete both of these -->
+
+	<arg name="shutdown_topic"			default="/hast/shutdown" />
+	<arg name="stereoMeas_sub"			default="/$(arg ugv_n)/stereo/pose"/>
+	<arg name="odom_topic"					default="/$(arg ugv_n)/hast/odom"	/>
+	<arg name="dkf_topic" 					default="/$(arg ugv_n)/dkf/pose"	/>
+	<arg name="ugv_state_pub_topic"	default="/$(arg ugv_n)/mux_state/pose"	/>
+	<arg name="slam_poses_topic"		default="/hast/jointslam/vehicle_states" />
+	<arg name="ugv_pose_topic"			default="/hast/jointslam/$(arg ugv_n)/est_pose"	/>
+	<arg name="ugv_mux_topic" 			default="/hast/jointslam/$(arg ugv_n)/mux_pose"/>
+	<arg name="ugv_mux_map_serve_topic"		default="/$(arg ugv_n)/mux/map/service_topic"/>
+
+	<arg unless="$(arg gazebo)" name="ugv_map_mux_topic"				default="/$(arg ugv_n)/hast/odom"/>
+	<arg unless="$(arg gazebo)" name="ugv_map_root_topic"				default="/$(arg ugv_n)/map"/>
+
+	<!-- if="$(arg gazebo)"  -->
+	<node if="$(arg gazebo)" ns="$(arg ugv_n)" pkg="tf" type="static_transform_publisher" name="tf_$(arg ugv_n)_map2$(arg ugv_n)_odom"  args="0 0 0 0 0 0 /$(arg ugv_n)/map /$(arg ugv_n)/hast/odom 100"/>
+	<arg  if="$(arg gazebo)" name="ugv_map_mux_topic"					default="/$(arg ugv_n)/mux/map"/>
+	<arg  if="$(arg gazebo)" name="ugv_map_root_topic"				default="/ugv1/map"/>
+
+	<arg name="ugv_running_topic"	default="/hast/$(arg ugv_n)_running" />
+
+	<!-- might not be useful -->
+	<arg name="uav_pose_topic" 		default="/jointSLAM/uav/estPose"	/>
+
+	<node 	pkg="hast" 	type="ugvMuxxer"	name="$(arg ugv_n)_Muxxer_$(env HOST)"	output="screen"	>
+		<param name="gazebo"							value="$(arg gazebo)"/>
+		<param name="primary"							value="$(arg primary)"/>
+		<param name="ugv_n"								value="$(arg ugv_n)"/>
+		<!-- <param name="trial" 							value="$(arg trial)" type="str"/>
+		<param name="date" 								value="$(arg date)" type="str"/>
+		<param name="user" 								value="$(arg user)"/> -->
+		<param name="ugv_matlab_field"		value="$(arg ugv_matlab_field)"/>
+		<param name="ugv_data_filename"		value="$(arg ugv_data_filename)"/>
+
+		<param name="ugv_pose_topic" 			value="$(arg ugv_pose_topic)"/>
+		<param name="slam_poses_topic" 		value="$(arg slam_poses_topic)"/>
+		<param name="shutdown_topic" 			value="$(arg shutdown_topic)"/>
+		<param name="stereoMeas_sub" 			value="$(arg stereoMeas_sub)"/>
+		<param name="ugv_mux_topic" 			value="$(arg ugv_mux_topic)"/>
+		<param name="ugv_state_pub_topic" value="$(arg ugv_state_pub_topic)"/>
+		<param name="odom_topic" 					value="$(arg odom_topic)"/>
+		<param name="dkf_topic" 					value="$(arg dkf_topic)"/>
+		<param name="Qw_scale" 						value="1.0"/>
+
+		<param name="ugv_running_topic" 				value="$(arg ugv_running_topic)"/>
+		<param name="ugv_map_mux_topic" 				value="$(arg ugv_map_mux_topic)"/>
+		<param name="ugv_map_root_topic"				value="$(arg ugv_map_root_topic)"/>
+		<param name="ugv_mux_map_serve_topic" 	value="$(arg ugv_mux_map_serve_topic)"/>  <!-- used to commuincate transform information directly, rather than through tf -->
+
+		<!-- <param name="trial_cmd_vel"							value="$(arg trial_cmd_vel)"/> -->
+		<!-- <param name="mux_cmd_topic" 						value="$(arg mux_cmd_topic)" /> -->
+		<param name="driver_cmd_topic"					value="$(arg driver_cmd_topic)" />
+		<param name="driver_goal_topic"					value="$(arg driver_goal_topic)" />
+		<param name="driver_status_topic" 			value="$(arg driver_status_topic)" />
+		<param name="move_base_cmd_topic" 			value="$(arg move_base_cmd_topic)" />
+
+
+		<!-- currently estimated pose of UAV -->
+		<param name="uav_pose_topic"				value="$(arg uav_pose_topic)"/>
+		<param name="absolute_init"					value="$(arg absolute_init)" />
+		<param name="absolute_measurements"	value="$(arg absolute_measurements)" />
+	</node>
+
+
+</launch>

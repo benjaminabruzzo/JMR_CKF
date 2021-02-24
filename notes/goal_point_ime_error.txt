@@ -1,0 +1,39 @@
+[ INFO] [1582814791.840904173]: fileops::filename: /home/benjamin/ros/data/20200227/001/fullSLAM_001.m
+[ INFO] [1582814791.956509562]: /hast/user: benjamin
+[ INFO] [1582814791.969698233]: /hast/date: 20200227
+[ INFO] [1582814791.975695841]: /hast/trial: 001
+[ INFO] [1582814791.980287047]: /hast/init_time: 1582814596.989989
+[ INFO] [1582814791.980362984]: trial: /home/benjamin/ros/data/20200227/001/trial_001.m
+[ INFO] [1582814792.023324575]:   trial::s_uav_pose_state_topic  = /ugv1/uav/state
+[ INFO] [1582814792.038476373]:   trial::uav.s_slam_switch_topic  = '/hast/service/uavslam/slam_switch'
+[ INFO] [1582814792.038535686]:   trial::jointSLAM.s_slam_switch_topic  = '/hast/service/jointslam/slam_switch'
+[ INFO] [1582814792.203337697]: SLAM:: serving tag loactions on /hast/service/ugv/goal
+[ WARN] [1582814792.345771526]: :~:~:~:~:~:~:~: fullSLAM.absolute_measurements :: false
+[ INFO] [1582814793.590532926]: trial: ! ! ! Starting trial ! ! !
+[ INFO] [1582814793.590613066]: trial: slamtest mode   = true
+[ WARN] [1582814793.590647213]: uav.liftoff(); ...
+[ INFO] [1582814793.590676461]: reCal(): Publishing Flat-Trim Command...
+[ INFO] [1582814793.840870618]: reCal(): Publishing IMU reCal Command...
+[ INFO] [1582814794.091100141]: reCal(): ...done
+[ INFO] [1582814794.092328957]: reCal(): Publishing Flat-Trim Command...
+[ INFO] [1582814794.342511318]: reCal(): Publishing IMU reCal Command...
+[ INFO] [1582814794.593498437]: reCal(): ...done
+[ WARN] [1582814794.596354655]: uavServeState() : 2
+[ WARN] [1582814794.597106438]: callState() : 2
+[ WARN] [1582814797.100273352]: uavServeState() : 7
+[ WARN] [1582814797.100588287]: callState() : 7
+[ WARN] [1582814800.862377746]: linearTrajTo: ToPos = [2.5000 0.1500 1.2000] [0.0000], FlyTime = [8.0000]
+[ WARN] [1582814808.947576396]: slamswitch(); ...
+[ INFO] [1582814808.948074804]:   fullSLAM: Begin using images for slam
+[ WARN] [1582814808.961581767]: slamswitch() complete.
+[ WARN] [1582814808.961661995]: linearTrajTo: ToPos = [2.0000 0.1500 1.2000] [0.0000], FlyTime = [8.0000]
+[ WARN] [1582814817.013475220]: linearTrajTo: ToPos = [1.5000 0.1500 1.2000] [0.0000], FlyTime = [8.0000]
+[ WARN] [1582814825.082115738]: linearTrajTo: ToPos = [1.0000 0.1500 1.2000] [0.0000], FlyTime = [8.0000]
+[ WARN] [1582814833.140658533]: linearTrajTo: ToPos = [1.5000 0.1500 1.2000] [0.0000], FlyTime = [8.0000]
+[ INFO] [1582814841.599355999]: SLAM:: ugv2 is requesting tag 8 location for goal action
+[ INFO] [1582814841.599516665]: SLAM::     (april[8].id = 8)
+[ INFO] [1582814841.599577091]: SLAM::     (april[8].measCount = 116)
+[ INFO] [1582814842.600796693]: TRIAL:: uav found goal tag, setting location as goal for ugv
+[ INFO] [1582814842.601216209]: TRIAL::     [x y phi] = [ 2.0615 -0.3329  0.1067 ]
+terminate called after throwing an instance of 'tf2::ExtrapolationException'
+  what():  Lookup would require extrapolation into the past.  Requested time 1582814822.248049970 but the earliest data is at time 1582814828.375208555, when looking up transform from frame [ugv1/map] to frame [ugv2/map]

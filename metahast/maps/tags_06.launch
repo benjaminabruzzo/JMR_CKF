@@ -1,0 +1,93 @@
+<!-- -*- mode: XML -*- -->
+
+<launch>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id08"/>
+		<arg name="id"	value="08"/>
+		<arg name="x"		value=" 2.077"/>
+		<arg name="y"		value="-0.281"/>
+		<arg name="Y"		value=" 1.623"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id01"/>
+		<arg name="id"	value="01"/>
+		<arg name="x"		value="-0.622"/>
+		<arg name="y"		value=" 0.013"/>
+		<arg name="Y"		value=" 4.295"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id02"/>
+		<arg name="id"	value="02"/>
+		<arg name="x"		value=" 1.619"/>
+		<arg name="y"		value=" 0.004"/>
+		<arg name="Y"		value=" 0.962"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id03"/>
+		<arg name="id"	value="03"/>
+		<arg name="x"		value=" 2.064"/>
+		<arg name="y"		value="-0.846"/>
+		<arg name="Y"		value=" 0.354"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id04"/>
+		<arg name="id"	value="04"/>
+		<arg name="x"		value=" 0.620"/>
+		<arg name="y"		value="-0.494"/>
+		<arg name="Y"		value=" 3.775"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id05"/>
+		<arg name="id"	value="05"/>
+		<arg name="x"		value=" 2.574"/>
+		<arg name="y"		value=" 0.344"/>
+		<arg name="Y"		value=" 2.315"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id06"/>
+		<arg name="id"	value="06"/>
+		<arg name="x"		value=" 0.827"/>
+		<arg name="y"		value=" 1.071"/>
+		<arg name="Y"		value=" 5.408"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id07"/>
+		<arg name="id"	value="07"/>
+		<arg name="x"		value="-0.372"/>
+		<arg name="y"		value="-0.496"/>
+		<arg name="Y"		value=" 2.644"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id09"/>
+		<arg name="id"	value="09"/>
+		<arg name="x"		value=" 1.579"/>
+		<arg name="y"		value=" 0.671"/>
+		<arg name="Y"		value=" 5.987"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id10"/>
+		<arg name="id"	value="10"/>
+		<arg name="x"		value=" 0.767"/>
+		<arg name="y"		value=" 0.189"/>
+		<arg name="Y"		value=" 1.180"/>
+	</include>
+
+	<include file="$(find robot_descriptions)/tags/launch/spawn_tag.launch" >
+		<arg name="tag"	value="id11"/>
+		<arg name="id"	value="11"/>
+		<arg name="x"		value=" 1.780"/>
+		<arg name="y"		value=" 1.219"/>
+		<arg name="Y"		value=" 2.851"/>
+	</include>
+
+</launch>

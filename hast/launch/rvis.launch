@@ -1,0 +1,92 @@
+<launch>
+	<arg name="gazebo" 						default="false" />
+	<arg name="show_rviz" 				default="true" />
+	<arg name="map"								default="tags_01"/>
+	<arg name="map_topic"					default="/map" />
+	<arg name="tf_prefix"					default="/vicon" />
+	<arg name="rviz_simple_goal"	default="/rviz/simple_goal" />
+
+	<arg unless="$(arg gazebo)" name="rvizconfig" 	default="$(find hast)/config/rviz/vicon_ugvn.rviz" />
+	<arg     if="$(arg gazebo)" name="rvizconfig" 	default="$(find hast)/config/rviz/gazebo_ugvn.rviz" />
+
+	<!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rvizconfig)">
+		<remap from="/move_base_simple/goal" 	to="$(arg rviz_simple_goal)"/>
+		<remap from="/initialpose" 				to="/rviz/initialpose" />
+		<remap from="/clicked_point" 			to="/rviz/clicked_point" />
+	</node> -->
+
+	<include	if="$(arg show_rviz)" file="$(find hast)/launch/rviz_display.launch" >
+		<arg name="gazebo" 	value="$(arg gazebo)"/>
+	</include>
+
+	<!-- RVIZ for ugvs -->
+	<arg name="ugv_model"			default="$(find robot_descriptions)/vicon/kobuki.urdf.xacro"/>
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="ugv1" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg ugv_model)"/>
+	</include>
+
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="ugv2" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg ugv_model)"/>
+	</include>
+
+	<!-- RVIZ for uav -->
+	<arg name="uav_model" 		default="$(find robot_descriptions)/vicon/ardrone_uav.urdf.xacro"/>
+	<include file="$(find hast)/config/rviz/vicon_urdf_rviz.launch">
+		<arg name="ugv_ns" 			value="uav" />
+		<arg name="tf_prefix" 	value="$(arg tf_prefix)"/>
+		<arg name="urdf_model" 	value="$(arg uav_model)"/>
+	</include>
+
+	<!-- RVIZ for april tags -->
+	<include	unless="$(arg gazebo)" file="$(find hast)/launch/rviz_tags.launch" />
+	<!-- <include			if="$(arg gazebo)" file="$(find robot_descriptions)/tags/launch/tags_grid_subset2.launch" /> -->
+	<!-- <include			if="$(arg gazebo)" file="$(find robot_descriptions)/tags/launch/tags_rand.launch" /> -->
+	<include			if="$(arg gazebo)" file="$(find hast_gazebo)/maps/$(arg map).launch" />
+
+	<!-- <group if="$(arg gazebo)">
+	  	<include file="$(find robot_descriptions)/tags/launch/tags_grid.launch" />
+	</group>
+
+	<group unless="$(arg gazebo)">
+	  	<include file="$(find hast)/launch/rviz_tags.launch" />
+	</group> -->
+
+</launch>
+
+<!-- <include file="$(arg tag_file)"/> -->
+<!-- <node pkg="hast"	type="goalPub"			name="goalPub_$(arg launcher)"			output="screen" /> -->
+<!-- 	<include file="$(find hast)/launch/goalPub.launch">
+		<arg name="goal_x" 		value="3.0"/>
+		<arg name="goal_y" 		value="0.1"/>
+		<arg name="goal_theta" 	value="0.01"/>
+		<arg name="goal_topic" 	value="/hast/ugv/goal"/>
+	</include>
+ -->
+
+
+<!-- rostopic pub -r 10 /tb/cmd_vel geometry_msgs/Twist  '{linear:  {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0,y: 0.0,z: 0.0}}' -->
+<!-- rostopic pub -1 /hast/shutdown hast/flag '{flag: {False}}' -->
+
+<!-- rostopic pub -1 /hast/ugv/goal geometry_msgs/Pose2D '{x: 2.0, y: 0.0, theta: 0.125}' -->
+
+	<!-- UAV TF for Rviz  -->
+	<!-- <arg name="UAV_ns" 						default="UAV" /> -->
+	<!-- <arg name="uav_model" 				default="$(find robot_descriptions)/UAV/urdf/ardrone_rviz.urdf.xacro"/>  -->
+	<!-- <param name="UAV_description" command="$(find xacro)/xacro - - inorder $(arg uav_model)" /> -->
+
+<!-- 	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_driver2odom"
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /map /ardrone_autonomy/odom 1"/>
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_driver2base"
+		args="0.0 0.0 0.0 0.0 0.0 0.0 /hast/uav/ardrone_base_link /vicon/uav/base_footprint 1"/>
+
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_base2red"
+		args="0.0 -0.22 -0.01 0.0 0.0 0.0 /vicon/uav/base_footprint /vicon/uav/ardrone_red_led 1"/>
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_base2blue"
+		args="0.0 0.22 -0.01 0.0 0.0 0.0 /vicon/uav/base_footprint /vicon/uav/ardrone_blue_led 1"/>
+	<node ns="$(arg UAV_ns)" pkg="tf" type="static_transform_publisher" name="$(arg UAV_ns)_base2green"
+		args="-0.22 0.0 -0.01 0.0 0.0 0.0 /vicon/uav/base_footprint /vicon/uav/ardrone_green_led 1"/>
+ -->

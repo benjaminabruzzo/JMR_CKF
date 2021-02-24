@@ -1,0 +1,44 @@
+\begin{table}
+	% \tiny
+	% \fontsize{9pt}{9.25pt}\selectfont
+	% \renewcommand\arraystretch{2}
+	\centering
+	\caption{Average position and yaw errors of the of the vehicle pose estimates for \textsub{UGV}{1} and the UAV averaged across all trials of each configuration.}
+	\label{tab:RMSE}
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{c c | c c | c c }
+		\toprule
+		\toprule
+		& &\multicolumn{2}{c|}{UAV} & \multicolumn{2}{c}{\textsub{UGV}{1}}  \\ 
+		\multicolumn{2}{c|}{Configuration} & RMS [cm] & $\psi$ [^o] & RMS [cm] & $\psi$ [^o]  \\ 
+		\midrule
+			\multirow{2}{*}{A}
+				& CKF &  5.629 &   1.68&  0.040 &   0.01 \\
+				& SLAM & 19.837 &   2.28&  1.170 &   0.29 \\
+		\midrule
+			\multirow{2}{*}{B}
+				& CKF &  1.753 &   1.23&  0.028 &   0.01 \\
+				& SLAM & 20.622 &   2.43&  1.618 &   0.32 \\
+		\midrule
+			\multirow{2}{*}{G}
+				& CKF &  9.289 &   2.90&  0.346 &   0.10 \\
+				& SLAM & 20.665 &   2.54&  1.320 &   0.33 \\
+		\midrule
+			\multirow{2}{*}{H}
+				& CKF &  9.584 &   3.10&  0.441 &   0.12 \\
+				& SLAM & 20.909 &   2.34&  1.139 &   0.28 \\
+		\midrule
+			\multirow{2}{*}{I}
+				& CKF &  9.451 &   3.11&  0.406 &   0.11 \\
+				& SLAM & 21.428 &   2.53&  1.819 &   0.37 \\
+		\midrule
+			\multirow{2}{*}{J}
+				& CKF &  9.673 &   3.07&  0.457 &   0.10 \\
+				& SLAM & 21.410 &   2.57&  1.410 &   0.34 \\
+		\toprule
+		\toprule
+	\end{tabular}
+	\renewcommand{\arraystretch}{1}
+	%\renewcommand{\arraystretch}{2}
+	%vspace{-8pt}%use this in case the image is in the margin
+\end{table}

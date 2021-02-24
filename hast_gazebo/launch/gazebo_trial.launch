@@ -1,0 +1,66 @@
+<launch>
+	<arg name="gazebo"		default="true" />
+	<arg name="exp_code"					default="A" />
+
+	<arg name="oneUGV"											default="false" />  <!-- use this when there is only 1 ugv in the experiment -->
+	<arg name="ugv1_lookatgoal"							default="false" />
+	<arg name="ugv2_lookatgoal"							default="false" />
+	<arg name="ugv1_watchugv2"							default="false" />
+	<arg name="ugv2_watchugv1"							default="false" />
+	<arg name="ugv1_picket"									default="false" />
+	<arg name="ugv2_picket"									default="false" />
+	<arg name="ugv1_w_hover"								default="false" />
+	<arg name="ugv2_w_hover"								default="false" />
+	<arg name="both_w_hover"								default="false" />
+
+	<arg name="uav_flight_state_topic"					default="/hast/uav/flightstate" />
+	<arg name="cmd_uav_autopilot_state_topic"		default="/hast/uav/state" />
+	<arg name="ckf_uav_autopilot_state_topic"		default="/ckf/uav/state" />
+	<arg name="slam_uav_autopilot_state_topic"	default="/hast/jointslam/uav/state" />
+	<arg name="jointslam_switch_topic"					default="/hast/service/jointslam/slam_switch" />
+
+	<!-- start apriltag node and swap drone to bottom camera -->
+		<!-- <include file="$(find hast)/launch/hast_april_bottomcam.launch"/> -->
+
+	<!-- start jointslam -->
+		<arg name="absolute_measurements" 		default="false"/>
+		<arg name="jointslam_state_flag"  		default="/hast/jointslam/slamstate" />
+
+		<include file="$(find hast)/launch/hast_jointSLAM.launch">
+			<arg name="numberOfUGV" 										value="2" />
+			<arg name="jointslam_state_flag" 						value="$(arg jointslam_state_flag)"/>
+			<arg name="absolute_measurements" 					value="$(arg absolute_measurements)" />
+			<arg name="uav_flight_state_topic"					value="$(arg uav_flight_state_topic)" />
+			<arg name="slam_uav_autopilot_state_topic"	value="$(arg slam_uav_autopilot_state_topic)" />
+		</include>
+
+		<!-- uav pose/state switch for autopilot -->
+		<node pkg="hast" type="uav_topic_switch.py" name="uav_topic_switch_$(env HOST)" output="screen" >
+			<param name="jointslam_state_flag"						value="$(arg jointslam_state_flag)" />
+			<param name="cmd_uav_autopilot_state_topic"		value="$(arg cmd_uav_autopilot_state_topic)" />
+			<param name="ckf_uav_autopilot_state_topic"		value="$(arg ckf_uav_autopilot_state_topic)" />
+			<param name="slam_uav_autopilot_state_topic"	value="$(arg slam_uav_autopilot_state_topic)" />
+		</node>
+
+	<!-- start experiment -->
+		<include file="$(find hast)/launch/trial.launch">
+			<arg name="gazebo"									value="$(arg gazebo)" />
+			<arg name="oneUGV"									value="$(arg oneUGV)" />
+			<arg name="exp_code"								value="$(arg exp_code)" />
+			<arg name="ugv1_lookatgoal"					value="$(arg ugv1_lookatgoal)" />
+			<arg name="ugv2_lookatgoal"					value="$(arg ugv2_lookatgoal)" />
+			<arg name="ugv1_watchugv2"					value="$(arg ugv1_watchugv2)" />
+			<arg name="ugv2_watchugv1"					value="$(arg ugv2_watchugv1)" />
+			<arg name="ugv1_picket"							value="$(arg ugv1_picket)" />
+			<arg name="ugv2_picket"							value="$(arg ugv2_picket)" />
+			<arg name="ugv1_w_hover"						value="$(arg ugv1_w_hover)" />
+			<arg name="ugv2_w_hover"						value="$(arg ugv2_w_hover)" />
+			<arg name="both_w_hover"						value="$(arg both_w_hover)" />
+			<arg name="uav_flight_state_topic"	value="$(arg uav_flight_state_topic)" />
+		</include>
+
+	<arg name="launcher"	default="trial_launch_$(env HOST)" />
+	<!-- <node pkg="hast"	type="killhast"					name="kill_$(arg launcher)"							output="screen" required="true"/> -->
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+
+</launch>

@@ -1,0 +1,5 @@
+stereougv_sensor stereo_obs # observed information
+ugvposewithcov ugvEst				 # estimate pose of observing UGV
+bool ifDKF # ony use the message data to update the DKF
+---
+ugvposewithcov pose # response from observed vehicle with current estimate

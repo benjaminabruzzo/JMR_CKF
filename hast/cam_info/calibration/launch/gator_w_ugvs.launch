@@ -1,0 +1,50 @@
+<launch>
+	<arg name="ugv_n"									default="ugv1"/>
+	<arg name="calibration_filename"	default="$(arg ugv_n)_vicon_data" />
+	<arg name="calibration_date"			default="20200117" />
+	<arg name="left_image_topic" 			default="/$(arg ugv_n)/pgrstereo/left/image_raw" />
+	<arg name="right_image_topic" 		default="/$(arg ugv_n)/pgrstereo/right/image_raw" />
+	<arg name="saveraw_image_topic" 	default="/hast/saveraw" />
+
+	<!-- vicon bridge -->
+	<include file="$(find vicon_bridge)/launch/vicon_bridge.launch">
+		<arg name="origin" 		value="/vicon" />
+		<arg name="vicon_ip" 	value="192.168.10.1" />
+	</include>
+
+	<!-- vicon logger -->
+	<include file="$(find hast)/cam_info/calibration/launch/calibration_recorder.launch">
+		<arg name="calibration_filename" 	value="$(arg calibration_filename)" />
+		<arg name="calibration_date" 			value="$(arg calibration_date)" />
+		<arg name="left_image_topic" 			value="$(arg left_image_topic)" />
+		<arg name="right_image_topic" 		value="$(arg right_image_topic)" />
+	</include>
+
+	<!-- <node pkg="image_view" type="image_view" name="image_view_left" >
+		<remap from="image" to="$(arg left_image_topic)" />
+	</node>
+
+	<node pkg="image_view" type="image_view" name="image_view_right" >
+		<remap from="image" to="$(arg right_image_topic)" />
+	</node> -->
+
+
+</launch>
+
+
+<!-- rostopic pub -r 10 /tb/cmd_vel geometry_msgs/Twist  '{linear:  {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0,y: 0.0,z: 0.0}}' -->
+<!-- rostopic pub -1 /hast/shutdown hast/flag '{flag: {False}}' -->
+
+<!-- rostopic pub -1 /hast/ugv/goal geometry_msgs/Pose2D '{x: 2.0, y: 0.0, theta: 0.125}' -->
+
+<!-- 	<arg name="launcher" 	default="trigger_launcher" />
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_$(arg launcher)"	output="screen"	required="true"/>
+	<node pkg="hast"	type="triggerSaveRaw"	name="triggerSaveRaw"	output="screen"	required="true"/>
+
+  <node pkg="image_view" type="image_view" name="image_view_right" >
+    <remap from="image" to="/pgrstereo/left/image_raw" />
+  </node>
+
+  <node pkg="image_view" type="image_view" name="image_view_left" >
+    <remap from="image" to="/pgrstereo/right/image_raw" />
+  </node> -->

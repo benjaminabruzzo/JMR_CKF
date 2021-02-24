@@ -1,0 +1,4 @@
+string requesting_node
+---
+#std_msgs/Header header # header of response time
+synctime sync_msg # node name, starttime, and current time

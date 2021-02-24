@@ -1,0 +1,13 @@
+%% init from 
+left_marker.pixels_left   = [ 279.590059,  397.293264];
+left_marker.pixels_right  = [ 190.689185,  397.293264];
+right_marker.pixels_left  = [ 383.033278,  397.212384];
+right_marker.pixels_right = [ 296.305544,  397.212384];
+rear_marker.pixels_left   = [ 363.836085,  397.418741];
+rear_marker.pixels_right  = [ 271.563842,  397.418741];
+
+
+Baseline =  0.15240000;
+FocalLength =  1082.46358758;
+Cx = [ 644.50000000];
+Cy = [ 482.50000000];

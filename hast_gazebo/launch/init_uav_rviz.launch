@@ -1,0 +1,43 @@
+<launch>
+	<!-- Lazy shutoff -->
+	<arg name="launcher"	default="spawn_$(env HOST)" />
+
+	<node pkg="hast"		type="killhast"		 			output="screen" name="killhast_$(arg launcher)"		 			required="true"/>
+	<node pkg="hast"		type="shutdownListener" output="screen" name="shutdownListener_$(arg launcher)" required="true"/>
+
+	<arg name="gazebo"				default="true"/>
+
+
+	<node pkg="map_server"	type="map_server"									name="map_server_$(env HOST)"	args="$(find hast)/maps/square300x300.yaml"/>
+	<node pkg="tf"					type="static_transform_publisher"	name="tf_map2viconorigin"			args="0 0 0 0 0 0 /vicon/origin /map 100"/>
+
+	<arg name="map"								default="tags_01"/>
+	<arg name="show_rviz" 				default="true" />
+	<include file="$(find hast)/launch/rvis.launch">
+		<arg name="show_rviz" 				value="$(arg show_rviz)" />
+		<arg name="rviz_simple_goal" 	value="/rviz/simple_goal" />
+		<arg name="gazebo" 						value="$(arg gazebo)" />
+		<arg name="map" 							value="$(arg map)" />
+	</include>
+
+	<include file="$(find hast)/launch/vicon_logger.launch">
+		<arg name="gazebo" 		value="$(arg gazebo)" />
+	</include>
+
+	<!-- Spawn UAV -->
+	<include file="$(find hast_gazebo)/launch/gazebo_uav.launch">
+		<arg name="gazebo" 		value="$(arg gazebo)" />
+	</include>
+
+</launch>
+
+
+
+<!--
+printf "launching uav_rviz    ... "
+screen -dmS uav_rviz
+screen -S uav_rviz -p 0 -X stuff "source ~/.bashrc^M"
+screen -S uav_rviz -p 0 -X stuff "roslaunch hast_gazebo init_uav_rviz.launch^M"
+sleep 5
+printf " launched.\n"
+ -->

@@ -1,0 +1,7 @@
+<launch>
+
+	<node pkg="hast"	type="shutdownListener"	name="shutdownListener_count_down_$(env HOST)"	required="true"/>
+	<node pkg="hast"	type="killhast"					name="killhast_count_down_$(env HOST)"					required="true"/>
+	<node pkg="hast"	type="count_down" 			name="count_down_$(env HOST)" 									output="screen" required="true"/>
+
+</launch>

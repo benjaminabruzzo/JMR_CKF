@@ -1,0 +1,42 @@
+<launch>
+	<arg name="launcher" 		default="spawn_ugv_$(env HOST)"/>
+	<node pkg="hast"				type="killhast"		 			output="screen" required="true" name="kill_$(arg launcher)"/>
+	<node pkg="hast"				type="shutdownListener" output="screen" required="true" name="shutdownListener_$(arg launcher)"/>
+	<arg name="trial" 			default="000" />
+	<arg name="date" 				default="20181207" />
+	<arg name="user" 				default="$(env USER)" />
+	<arg name="primaryUGV" 	default="true" />
+
+	<!-- spawn ugv -->
+	<arg name="ugv_n"	default="ugv1"/>
+	<arg name="map_x" default="0.0"/> 
+	<arg name="map_y" default="0.0"/> 
+	<arg name="map_z" default="0.0"/> 
+	<arg name="map_Y" default="0.0"/> 
+	<include file="$(find robot_descriptions)/UGV_n/launch/spawn_ugv.launch">
+		<arg name="ugv_ns" 							value="$(arg ugv_n)" />
+		<arg name="move_base_ns" 				value="$(arg ugv_n)" />
+		<arg name="raw_wheel_cmd_topic" value="$(arg ugv_n)/cmd_vel_raw" />
+		
+		<arg name="x"	value="-1.50"/>
+		<arg name="y"	value="0.5"/>
+		<arg name="z" value="0.0"/>
+		<arg name="R" value="0"/>
+		<arg name="P" value="0"/>
+		<arg name="Y"	value="-0.25"/>
+	</include>
+
+	<!-- Environment specific params -->
+	<arg name="color_param_file"  default="$(find hast)/config/stereo_tbrl_params.yaml" />	
+
+	<!-- Launch UGV -->
+	<include file="$(find hast)/launch/hast_ugv.launch">
+		<arg name="primary" 		value="$(arg primaryUGV)" />
+		<arg name="ugv_n" 			value="$(arg ugv_n)" />
+		<arg name="date" 				value="$(arg date)" />
+		<arg name="user" 				value="$(arg user)" />
+		<arg name="trial" 			value="$(arg trial)" />
+		<arg name="color_param_file"  	value="$(arg color_param_file)" />	
+	</include>
+
+</launch>

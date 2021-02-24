@@ -1,0 +1,36 @@
+<launch>
+	<!-- <arg name="ugv_n"										default="ugv1" /> -->
+	<arg name="gazebo"									default="true" />
+	<arg name="vicon_run"								default="001" />
+	<arg name="vicon_date"							default="20190207" />
+
+	<arg name="uav_state_sub" 					default="/hast/uav/state" />
+	<arg name="uav_cmd_vel_topic"				default="/hast/uav/cmd_vel"/>
+	<arg name="ugv1EstimatedState_sub"	default="/ugv1/ckf_state"/>
+	<arg name="ugv2EstimatedState_sub"	default="/ugv2/ckf_state"/>
+
+	<include file="$(find robot_descriptions)/UAV/launch/UAV_$(arg vicon_date)_$(arg vicon_run).launch" >
+		<arg name="uav_cmd_vel_topic" 	value="$(arg uav_cmd_vel_topic)"/>
+	</include>
+
+	<include file="$(find hast)/launch/hast_uavAutopilot.launch">
+		<arg name="gazebo" 									value="$(arg gazebo)" />
+		<arg name="uav_state_sub" 					value="$(arg uav_state_sub)"/>
+		<arg name="uav_cmd_topic" 					value="$(arg uav_cmd_vel_topic)"/>
+		<arg name="ugv1EstimatedState_sub"	value="$(arg ugv1EstimatedState_sub)"/>
+		<arg name="ugv2EstimatedState_sub"	value="$(arg ugv2EstimatedState_sub)"/>
+	</include>
+
+	<arg name="down_image"  		default="image_rect" />
+	<arg name="tf_x_offset" 		default="0.0" />
+	<include file="$(find hast)/launch/hast_april_bottomcam.launch">
+		<arg name="gazebo"				value="$(arg gazebo)"/>
+		<arg name="image" 				value="$(arg down_image)"/>
+		<arg name="tf_x_offset" 	value="$(arg tf_x_offset)"/>
+	</include>
+
+	<include file="$(find hast)/launch/hast_uavCKF.launch" required="true">
+		<arg name="gazebo"						value="$(arg gazebo)"/>
+	</include>
+
+</launch>

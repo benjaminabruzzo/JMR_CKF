@@ -1,0 +1,76 @@
+<!-- -*- mode: XML -*-  -->
+
+<launch>
+	<arg name="launcher" 						default="hast_ugvCKF" />
+	<arg name="ugv_n" 							default="ugv1" />
+	<arg name="primary" 						default="false" />
+	<arg name="gazebo"							default="false" />
+	<arg name="ugv_matlab_field"		default="CKF$(arg ugv_n)_Recorder" />
+	<arg name="ugv_data_filename"		default="$(arg ugv_n)_ckf" />
+
+	<arg name="absolute_init"							default="false"/>
+	<arg name="use_compassbias"						default="true"/>
+
+	<arg name="shutdown_topic"						default="/hast/shutdown" />
+	<arg name="navdata_topic"							default="/ardrone/navdata" />
+	<arg name="uav_navdata_topic" 				default="/ardrone/navdata" />
+	<arg name="uav_cmdvel_topic"					default="/hast/uav/cmd_vel" />
+
+	<arg name="max_number_of_tags" 				default="20"/>
+	<arg name="ref_TF_frame" 							default="/map"/>
+	<arg name="uav_pose_topic"						default="/$(arg ugv_n)/uav/pose"/> <!-- subscribe to this data to update dkf -->
+	<arg name="dkf_topic" 								default="/$(arg ugv_n)/dkf/pose"/>
+	<arg name="jointslam_state_flag"			default="/hast/jointslam/slamstate"/>
+	<arg name="uav_slam_switch_topic"			default="/hast/service/uav/slamswitch"/>
+
+
+	<arg name="local_ugv_sensor_pose_sub_topic"		default="/hast/$(arg ugv_n)_stereo/ugvugvsensor" /> <!-- topic of local stereo measurement before sending to other ugv -->
+
+<!-- <arg name="jointslam_state_flag"  default="/hast/uav/slamstate" /> -->
+
+	<node 	pkg="hast" 	type="ugvCKF"	name="$(arg ugv_n)_ugvCKF_$(env HOST)"	output="screen">
+		<param name="ugv_n" 								value="$(arg ugv_n)"/>
+		<param name="primary" 							value="$(arg primary)"/>
+		<param name="gazebo"								value="$(arg gazebo)"/>
+		<param name="ugv_matlab_field"			value="$(arg ugv_matlab_field)"/>
+		<param name="ugv_data_filename" 		value="$(arg ugv_data_filename)"/>
+		<param name="absolute_init" 				value="$(arg absolute_init)"/>
+
+		<param name="odom_topic" 						value="$(arg ugv_n)/hast/odom"	/>
+		<param name="footprint_topic" 			value="$(arg ugv_n)/oneckf_base_footprint"	/>
+		<param name="ugvCmd_topic"					value="$(arg ugv_n)/cmd_vel_limited"/>
+		<param name="Pose_sub" 							value="/$(arg ugv_n)/stereo/pose"/>
+		<param name="ugvn_state" 						value="/$(arg ugv_n)/ckf_state"/>
+		<param name="dkf_topic" 						value="$(arg dkf_topic)"/>
+
+		<param name="obstacle_cloud_topic" 	value="/$(arg ugv_n)/april/PointCloud2"/>
+		<param name="goal_cloud_topic" 			value="/$(arg ugv_n)/goal/PointCloud2"/>
+
+		<param name="shutdown_topic" 				value="$(arg shutdown_topic)"/>
+		<param name="navdata_topic" 				value="$(arg navdata_topic)"/>
+		<param name="slamstate_topic" 			value="$(arg jointslam_state_flag)"/>
+
+		<param name="local_ugv_sensor_pose_sub_topic" 	value="$(arg local_ugv_sensor_pose_sub_topic)"/>
+
+
+
+		<!-- <param name="ugv_odom_frame" 	value="/$(arg ugv_n)/hast/odom"/> -->
+		<!-- <param name="uav_base_frame"		value="/hast/uav/ardrone_base_link"			/> -->
+	</node>
+
+</launch>
+
+	<!-- <node 	pkg="hast" 	type="threshImage"	name="threshImage" 		/> -->
+
+	<!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hast)/config/$(arg tb_base)/$(arg tb_base)_rviz.rviz" /> -->
+
+
+	<!-- <node pkg="rosbag" type="record" name="rosbag" args="-O $(arg bagpath) tf /ardrone/cmd_vel /ardrone/imu /ardrone/land /ardrone/mag /ardrone/navdata /ardrone/navdata_pwm /ardrone/reset /ardrone/odom /ardrone/takeoff /clock /vo2/info /vo2/odometry /vo2/pose /mobile_base /tag_detections -e '/hast/(.*)' -e '/move_base/(.*)' "/> -->
+
+	<!-- Stereoscopic Image Processing -->
+	<!-- <arg name="sync_namespace" default="sync" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" output="screen" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="image_view" type="image_view" name="left_image_view" args="image:=/$(arg sync_namespace)/left/image_rect_color" /> -->
+	<!-- <node ns="$(arg sync_namespace)" pkg="image_view" type="image_view" name="right_image_view" args="image:=/$(arg sync_namespace)/right/image_rect_color" /> -->
+	<!-- <node pkg="image_view" type="disparity_view" name="disparity_view" args="image:=/$(arg sync_namespace)/disparity" /> -->
+	<!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find ar_pose)/launch/live_multi.rviz"/> -->

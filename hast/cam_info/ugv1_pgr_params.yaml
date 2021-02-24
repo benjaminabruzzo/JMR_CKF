@@ -1,0 +1,16 @@
+# ugv1 stereo camera calibration parameters
+# Left SERIAL 17496991
+# Right SERIAL 17496985
+# yaml file auto-generated on : 20200115
+#### TAB CANNOT BE USED #####
+
+FocalLength: 1289.9524511199999779
+Baseline: 0.1789203784865196
+RightOffset: -194.5116265229999897
+camXOffset: 0.005240
+camYOffset: 0.000000
+camZOffset: 0.233270
+Cx: 962.6438407900000129
+Cy: 385.9585990909999964
+dRx: 0.00
+dRz: 0.00

@@ -1,0 +1,9 @@
+<robot name="kobuki"  xmlns:xacro="http://ros.org/wiki/xacro">
+	<!-- Defines the kobuki component tag. -->
+  	<xacro:include filename="$(find robot_descriptions)/vicon/kobuki_base.urdf.xacro" />
+
+	<!--  load ugv using namespace by argument-->
+  	<xacro:arg name="ns_arg" default="ugv_n" />
+  	<xacro:kobuki_base_macro  X_ROBOT_NAMESPACE="$(arg ns_arg)"/>
+
+</robot>
